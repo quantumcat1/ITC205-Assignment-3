@@ -5,6 +5,7 @@ import library.interfaces.entities.IBook;
 import library.interfaces.entities.ILoan;
 
 //just a little change to make sure I can push to the repository properly
+//extra comment to change it further
 
 public class Book implements IBook
 {
