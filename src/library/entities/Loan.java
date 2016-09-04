@@ -2,51 +2,43 @@ package library.entities;
 
 import java.util.Date;
 
-import library.interfaces.entities.IBook;
-import library.interfaces.entities.ILoan;
-import library.interfaces.entities.IMember;
+import library.entities.Book;
+import library.entities.Member;
+import library.interfaces.entities.IEntity;
 
 //TODO: implement this class
 
-public class Loan implements ILoan
+public class Loan implements IEntity
 {
-	IMember borrower;
-	IBook book;
-	int loanId;
-	Date borrowDate;
+	public static final int LOAN_PERIOD = 14;
+	private Member member;
+	private Book book;
+	private int id;
+	private Date borrowDate;
 
-	public void commit(int id)
-	{
-
-	}
-
-	public void complete()
-	{
-
-	}
-
-	public boolean isOverDue()
-	{
-		return false;
-	}
-
+	//TODO: implement a loan period info somewhere
 	public boolean checkOverDue(Date currentDate)
 	{
 		return false;
 	}
 
-	public IMember getBorrower()
+	public Member getMember()
 	{
-		return null;
+		return member;
 	}
 
-	public IBook getBook()
+	public Book getBook()
 	{
-		return null;
+		return book;
 	}
 
-	public int getLoanId()
+	public int getId()
 	{
-		return 0;
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
 	}
 }

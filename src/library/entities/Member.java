@@ -2,20 +2,20 @@ package library.entities;
 
 import java.util.List;
 
-import library.interfaces.entities.EMemberState;
-import library.interfaces.entities.ILoan;
-import library.interfaces.entities.IMember;
+import library.enums.EMemberState;
+import library.interfaces.entities.IEntity;
 
-//TODO: implement this class
+//TODO: finish implementing this class
 
-public class Member implements IMember
+public class Member implements IEntity
 {
-	int memberId;
-	String firstName;
-	String lastName;
-	float fineAmount;
-	String contactPhone;
-	String emailAddress;
+	private int id;
+	private String firstName;
+	private String lastName;
+	private float fineAmount;
+	private String phoneNumber;
+	private String emailAddress;
+	private EMemberState state;
 
 	public boolean hasOverDueLoans()
 	{
@@ -38,70 +38,66 @@ public class Member implements IMember
 
 	public boolean hasReachedFineLimit()
 	{
+		//TODO: implement a max fine info somewhere
 		return false;
 	}
 
-	public float   getFineAmount()
+	public float getFineAmount()
 	{
 		return fineAmount;
 	}
 
-	//TODO: this will return void after interfaces are gone
-	public void addFine(float fine)
+	//TODO: finish this after max fine amount info is added somewhere
+	public boolean addFine(float fine)
 	{
 		float newAmount = fineAmount + fine;
 		//check if exceeds fine limit and return false if it does, otherwise:
 		fineAmount = newAmount;
-		//return true;
+		return true;
 	}
 
-	public void payFine(float payment)
+	public boolean payFine(float payment)
 	{
-
+		if(payment <= fineAmount)
+		{
+			fineAmount -= payment;
+			return true;
+		}
+		return false;
 	}
 
-	public void addLoan(ILoan loan)
+	public EMemberState getState()
 	{
-
+		return state;
 	}
 
-	public List<ILoan> getLoans()
+	public String getFirstName()
 	{
-		return null;
+		return firstName;
 	}
 
-	public void    removeLoan(ILoan loan)
+	public String getLastName()
 	{
-
+		return lastName;
 	}
 
-	public EMemberState   getState()
+	public String getPhoneNumber()
 	{
-		return null;
-	}
-
-	public String  getFirstName()
-	{
-		return "";
-	}
-
-	public String  getLastName()
-	{
-		return "";
-	}
-
-	public String  getContactPhone()
-	{
-		return "";
+		return phoneNumber;
 	}
 
 	public String  getEmailAddress()
 	{
-		return "";
+		return emailAddress;
 	}
 
-	public int     getMemberId()
+	public int getId()
 	{
-		return 0;
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
 	}
 }

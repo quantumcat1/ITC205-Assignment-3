@@ -1,27 +1,16 @@
 package library.entities;
 
-import library.interfaces.entities.EBookState;
-import library.interfaces.entities.IBook;
-import library.interfaces.entities.ILoan;
+import library.enums.EBookState;
+import library.interfaces.entities.IEntity;
 
 
-public class Book implements IBook
+public class Book implements IEntity
 {
-	EBookState state;
-	String author;
-	String title;
-	String callNumber;
-	//bookId, not id - otherwise could get confused with the member Id who is borrowing it.
-	int bookId;
-
-	public void borrow()
-	{
-		//will be gone when interface gone
-	}
-	public void returnBook (boolean damaged)
-	{
-		//will be gone when interface gone
-	}
+	private EBookState state;
+	private String author;
+	private String title;
+	private String callNumber;
+	private int id;
 
 	public void lose()
 	{
@@ -68,20 +57,12 @@ public class Book implements IBook
 
 	public int getId()
 	{
-		return bookId;
+		return id;
 	}
 
 	@Override
-	public void borrow(ILoan loan) {
-		// TODO Auto-generated method stub
-
+	public void setId(int id)
+	{
+		this.id = id;
 	}
-
-	@Override
-	public ILoan getLoan() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 }
