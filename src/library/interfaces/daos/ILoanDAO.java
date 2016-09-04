@@ -3,29 +3,28 @@ package library.interfaces.daos;
 import java.util.Date;
 import java.util.List;
 
-import library.interfaces.entities.IBook;
-import library.interfaces.entities.ILoan;
-import library.interfaces.entities.IMember;
+import library.entities.Book;
+import library.entities.Loan;
+import library.entities.Member;
 
-public interface ILoanDAO {
-		
-	public ILoan createLoan(IMember borrower, IBook book);
+public interface ILoanDAO
+{
+	public Loan createLoan(Member borrower, Book book);
 
-	public void commitLoan(ILoan loan);
-	
-	public ILoan getLoanByID(int id);
-	
-	public ILoan getLoanByBook(IBook book);
-	
-	public List<ILoan> listLoans();
-	
-	public List<ILoan> findLoansByBorrower(IMember borrower);
+	public void commitLoan(Loan loan);
 
-	public List<ILoan> findLoansByBookTitle(String title);
-	
+	public Loan getLoanById(int id);
+
+	public Loan getLoanByBook(Book book);
+
+	public List<Loan> listLoans();
+
+	public List<Loan> findLoansByBorrower(Member borrower);
+
+	public List<Loan> findLoansByBookTitle(String title);
+
 	public void updateOverDueStatus(Date currentDate);
 
-	public List<ILoan> findOverDueLoans();
-
+	public List<Loan> findOverDueLoans();
 }
 

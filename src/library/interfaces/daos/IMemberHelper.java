@@ -1,9 +1,8 @@
 package library.interfaces.daos;
 
-import library.interfaces.entities.IMember;
+import library.entities.Member;
 
-public interface IMemberHelper {
-	
-	public IMember makeMember(String firstName, String lastName, String contactPhone, String emailAddress, int id);
-
+public interface IMemberHelper
+{
+	public Member makeMember(String firstName, String lastName, String contactPhone, String emailAddress, int id);
 }
