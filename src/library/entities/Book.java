@@ -14,32 +14,13 @@ public class Book implements IBook
 	//bookId, not id - otherwise could get confused with the member Id who is borrowing it.
 	int bookId;
 
-	public void borrow(ILoan loan)
+	public void borrow()
 	{
-		//TODO: implement borrow()
+		//will be gone when interface gone
 	}
-
-	public ILoan getLoan()
+	public void returnBook (boolean damaged)
 	{
-		//TODO: implement loan()
-		return null;
-	}
-
-	public void returnBook(boolean damaged)
-	{
-		//can't return book unless it was on loan.
-		if(state == EBookState.ON_LOAN)
-		{
-			if(damaged)
-			{
-				state = EBookState.DAMAGED;
-			}
-			else
-			{
-				state = EBookState.AVAILABLE;
-			}
-		}
-		//TODO: add something about changing the loan?
+		//will be gone when interface gone
 	}
 
 	public void lose()
@@ -49,22 +30,20 @@ public class Book implements IBook
 
 	public void repair()
 	{
-		//should not become available if it is lost, on loan, or disposed of
+		//if not damaged, can't repair it
 		if(state == EBookState.DAMAGED)
 		{
-			state = EBookState.AVAILABLE;
+			state = EBookState.ACCEPTABLE;
 		}
-		//TODO: make sure it is not part of a loan
 	}
 
 	public void dispose()
 	{
-		//should not be thrown away if it is available, on loan, or lost.
+		//can't throw away an acceptable book
 		if(state == EBookState.DAMAGED)
 		{
 			state = EBookState.DISPOSED;
 		}
-		//TODO: make sure it is not part of a loan
 	}
 
 	public EBookState getState()
@@ -91,4 +70,18 @@ public class Book implements IBook
 	{
 		return bookId;
 	}
+
+	@Override
+	public void borrow(ILoan loan) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ILoan getLoan() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }

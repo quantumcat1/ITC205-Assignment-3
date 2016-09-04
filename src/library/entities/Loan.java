@@ -13,6 +13,7 @@ public class Loan implements ILoan
 	IMember borrower;
 	IBook book;
 	int loanId;
+	Date borrowDate;
 
 	public void commit(int id)
 	{
