@@ -3,28 +3,9 @@ package library.daos;
 import java.util.List;
 
 import library.entities.Member;
-import library.interfaces.daos.IDAO;
 
-public class MemberDAO implements IDAO<Member>
+public class MemberDAO extends DAO <Member>
 {
-
-	@Override
-	public Member add(Member member)
-	{
-		return null;
-	}
-
-	@Override
-	public Member getById(int id)
-	{
-		return null;
-	}
-
-	@Override
-	public List<Member> list()
-	{
-		return null;
-	}
 
 	public List<Member> findMembersByLastName(String lastName)
 	{

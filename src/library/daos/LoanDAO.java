@@ -6,34 +6,18 @@ import java.util.List;
 import library.entities.Book;
 import library.entities.Loan;
 import library.entities.Member;
-import library.interfaces.daos.IDAO;
 
-public class LoanDAO implements IDAO<Loan>
+public class LoanDAO extends DAO <Loan>
 {
-	public Loan add(Loan loan)
-	{
-		return null;
-	}
 
 	//TODO: find out what the purpose of "commit" is and whether it's important
 	public void commitLoan(Loan loan)
 	{
 	}
 
-	@Override
-	public Loan getById(int id)
-	{
-		return null;
-	}
 
 	public Loan getLoanByBook(Book book) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Loan> list()
-	{
 		return null;
 	}
 

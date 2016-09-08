@@ -3,22 +3,9 @@ package library.daos;
 import java.util.List;
 
 import library.entities.Book;
-import library.interfaces.daos.IDAO;
 
-public class BookDAO implements IDAO<Book>
+public class BookDAO extends DAO <Book>
 {
-
-	@Override
-	public Book add(Book book)
-	{
-		return null;
-	}
-
-	@Override
-	public Book getById(int id)
-	{
-		return null;
-	}
 
 	public List<Book> findBooksByAuthor(String author)
 	{
@@ -31,12 +18,6 @@ public class BookDAO implements IDAO<Book>
 	}
 
 	public List<Book> findBooksByAuthorTitle(String author, String title)
-	{
-		return null;
-	}
-
-	@Override
-	public List<Book> list()
 	{
 		return null;
 	}
