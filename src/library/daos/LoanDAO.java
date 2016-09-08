@@ -9,6 +9,16 @@ import library.entities.Member;
 
 public class LoanDAO extends DAO <Loan>
 {
+	private static LoanDAO instance = null;
+
+	public static LoanDAO getInstance()
+	{
+		if(instance == null)
+		{
+			instance = new LoanDAO();
+		}
+		return instance;
+	}
 
 	//TODO: find out what the purpose of "commit" is and whether it's important
 	public void commitLoan(Loan loan)

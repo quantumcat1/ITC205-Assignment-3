@@ -6,6 +6,16 @@ import library.entities.Member;
 
 public class MemberDAO extends DAO <Member>
 {
+	private static MemberDAO instance = null;
+
+	public static MemberDAO getInstance()
+	{
+		if(instance == null)
+		{
+			instance = new MemberDAO();
+		}
+		return instance;
+	}
 
 	public List<Member> findMembersByLastName(String lastName)
 	{
@@ -21,5 +31,4 @@ public class MemberDAO extends DAO <Member>
 	{
 		return null;
 	}
-
 }

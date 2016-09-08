@@ -10,7 +10,6 @@ public class DAO <X extends IEntity>
 {
 	private Map<Integer, X> database;
 
-
 	public boolean add(X x)
 	{
 		X testX = database.get(x.getId());
