@@ -1,7 +1,7 @@
 package library.entities;
 
 import library.enums.EBookState;
-import library.interfaces.entities.IEntity;
+import library.entities.Entity;
 
 
 public class Book extends Entity//implements IEntity
