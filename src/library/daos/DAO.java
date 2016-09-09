@@ -3,10 +3,10 @@ package library.daos;
 import java.util.List;
 import java.util.Map;
 
-import library.interfaces.entities.IEntity;
+import library.entities.Entity;
 
 
-public class DAO <X extends IEntity>
+public class DAO <X extends Entity>
 {
 	private Map<Integer, X> database;
 
