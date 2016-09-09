@@ -12,11 +12,6 @@ public class Book extends Entity//implements IEntity
 	private String callNumber;
 	static private int counter = 0;
 
-	protected int increment()
-	{
-		return counter ++;
-	}
-
 	public Book(String author, String title, String callNumber)
 	{
 		super(counter++);
