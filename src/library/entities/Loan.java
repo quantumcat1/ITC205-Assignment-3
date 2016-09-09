@@ -1,5 +1,6 @@
 package library.entities;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import library.entities.Book;
@@ -23,9 +24,16 @@ public class Loan extends Entity
 		this.borrowDate = borrowDate;
 	}
 
-	//TODO: implement a loan period info somewhere
 	public boolean checkOverDue(Date currentDate)
 	{
+		Calendar c = Calendar.getInstance();
+		c.setTime(borrowDate);
+		c.add(Calendar.DATE, LOAN_PERIOD);
+		Date dueDate = c.getTime();
+		if(currentDate.after(dueDate))
+		{
+			return true;
+		}
 		return false;
 	}
 
