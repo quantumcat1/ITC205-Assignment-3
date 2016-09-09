@@ -4,13 +4,27 @@ import library.enums.EBookState;
 import library.interfaces.entities.IEntity;
 
 
-public class Book implements IEntity
+public class Book extends Entity//implements IEntity
 {
 	private EBookState state;
 	private String author;
 	private String title;
 	private String callNumber;
 	private int id;
+	static private int counter = 0;
+
+	protected int increment()
+	{
+		return counter ++;
+	}
+
+	public Book(String author, String title, String callNumber)
+	{
+		super(counter++);
+		this.author = author;
+		this.title = title;
+		this.callNumber = callNumber;
+	}
 
 	public void lose()
 	{
@@ -53,16 +67,5 @@ public class Book implements IEntity
 	public String getCallNumber()
 	{
 		return callNumber;
-	}
-
-	public int getId()
-	{
-		return id;
-	}
-
-	@Override
-	public void setId(int id)
-	{
-		this.id = id;
 	}
 }

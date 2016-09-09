@@ -1,30 +1,28 @@
 package library.entities;
 
-import java.util.List;
+//import java.util.List;
 
 import library.enums.EMemberState;
-import library.interfaces.entities.IEntity;
 
 //TODO: finish implementing this class
 
-public class Member implements IEntity
+public class Member extends Entity
 {
-	private int id;
 	private String firstName;
 	private String lastName;
 	private float fineAmount;
 	private String phoneNumber;
 	private String emailAddress;
 	private EMemberState state;
+	private static int counter = 0;
 
-	public boolean hasOverDueLoans()
+	public Member (String firstName, String lastName, String phoneNumber, String emailAddress)
 	{
-		return false;
-	}
-
-	public boolean hasReachedLoanLimit()
-	{
-		return false;
+		super(counter++);
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
+		this.emailAddress = emailAddress;
 	}
 
 	public boolean hasFinesPayable()
@@ -89,15 +87,5 @@ public class Member implements IEntity
 	public String  getEmailAddress()
 	{
 		return emailAddress;
-	}
-
-	public int getId()
-	{
-		return id;
-	}
-
-	public void setId(int id)
-	{
-		this.id = id;
 	}
 }
