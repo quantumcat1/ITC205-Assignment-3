@@ -10,7 +10,6 @@ public class Book extends Entity//implements IEntity
 	private String author;
 	private String title;
 	private String callNumber;
-	private int id;
 	static private int counter = 0;
 
 	protected int increment()
