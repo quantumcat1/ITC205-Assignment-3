@@ -1,13 +1,10 @@
 package library.entities;
 
-//import java.util.List;
-
 import library.enums.EMemberState;
-
-//TODO: finish implementing this class
 
 public class Member extends Entity
 {
+	public static final float MAX_FINE = 100;
 	private String firstName;
 	private String lastName;
 	private float fineAmount;
@@ -36,7 +33,10 @@ public class Member extends Entity
 
 	public boolean hasReachedFineLimit()
 	{
-		//TODO: implement a max fine info somewhere
+		if(fineAmount >= MAX_FINE)
+		{
+			return true;
+		}
 		return false;
 	}
 
@@ -45,11 +45,13 @@ public class Member extends Entity
 		return fineAmount;
 	}
 
-	//TODO: finish this after max fine amount info is added somewhere
 	public boolean addFine(float fine)
 	{
 		float newAmount = fineAmount + fine;
-		//check if exceeds fine limit and return false if it does, otherwise:
+		if(newAmount > MAX_FINE)
+		{
+			return false;
+		}
 		fineAmount = newAmount;
 		return true;
 	}
