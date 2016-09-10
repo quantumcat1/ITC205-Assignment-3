@@ -46,14 +46,17 @@ public class Main implements IMainListener
 
 
 	@Override
-	public void borrowBooks() {
+	public void borrowBooks()
+	{
 		BorrowUC_CTL ctl = new BorrowUC_CTL(reader, scanner, printer, display);
 				// null, null, null);
         javax.swing.SwingUtilities.invokeLater
         (
 	        new Runnable()
 	        {
-	            public void run() {
+	            public void run()
+	            {
+	            	reader.setEnabled(true);
 	            	ctl.initialise();
 	            }
 	        }
@@ -127,8 +130,10 @@ public class Main implements IMainListener
 
         // start the GUI
 		Main main = new Main();
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        javax.swing.SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
             	main.display.setDisplay(new MainPanel(main), "Main Menu");
                 main.showGUI();
             }
