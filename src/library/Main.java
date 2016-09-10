@@ -32,7 +32,7 @@ public class Main implements IMainListener
 		printer = new Printer();
 		display = new Display();
 
-		//setupTestData();
+		setupTestData();
 	}
 
 
@@ -89,37 +89,35 @@ public class Main implements IMainListener
 		member[4] = MemberDAO.getInstance().add(new Member("fName4", "lName4", "0005", "email4"));
 		member[5] = MemberDAO.getInstance().add(new Member("fName5", "lName5", "0006", "email5"));
 
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance(); //defaults to now
 		Date now = cal.getTime();
+		//make the borrowDate be so long ago that the books are now due:
+		cal.add(Calendar.DATE, -1*(Loan.LOAN_PERIOD + 1));
+		Date nowOverDue = cal.getTime();
+
 
 		//create a member with overdue loans
 		for (int i=0; i<2; i++)
 		{
-			Loan loan = loanDAO.createLoan(member[1], book[i]);
-			loanDAO.commitLoan(loan);
+			Loan loan =  LoanDAO.getInstance().add(new Loan(member[1], book[i], nowOverDue));
 		}
-		cal.setTime(now);
-		cal.add(Calendar.DATE, Loan.LOAN_PERIOD + 1);
-		Date checkDate = cal.getTime();
-		loanDAO.updateOverDueStatus(checkDate);
 
 		//create a member with maxed out unpaid fines
-		member[2].addFine(10.0f);
+		member[2].addFine(Member.MAX_FINE + 1);
 
 		//create a member with maxed out loans
+		//TODO: make sure too many loans can't be added.
 		for (int i=2; i<7; i++)
 		{
-			Loan loan = loanDAO.createLoan(member[3], book[i]);
-			loanDAO.commitLoan(loan);
+			Loan loan = LoanDAO.getInstance().add(new Loan(member[3], book[i], now));
 		}
 
 		//a member with a fine, but not over the limit
-		member[4].addFine(5.0f);
+		member[4].addFine(50);
 
 		//a member with a couple of loans but not over the limit
 		for (int i=7; i<9; i++) {
-			Loan loan = loanDAO.createLoan(member[5], book[i]);
-			loanDAO.commitLoan(loan);
+			Loan loan = LoanDAO.getInstance().add(new Loan(member[5], book[i], now));
 		}
 	}
 
