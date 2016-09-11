@@ -1,5 +1,7 @@
 package library.interfaces;
 
+import library.enums.EBorrowState;
+
 public interface IBorrowUI {
 
 	public void setState(EBorrowState state);

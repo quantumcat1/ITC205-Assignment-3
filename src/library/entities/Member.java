@@ -5,6 +5,7 @@ import library.enums.EMemberState;
 public class Member extends Entity
 {
 	public static final float MAX_FINE = 100;
+	public static final int MAX_LOANS = 4;
 	private String firstName;
 	private String lastName;
 	private float fineAmount;

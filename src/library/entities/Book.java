@@ -4,7 +4,7 @@ import library.enums.EBookState;
 import library.entities.Entity;
 
 
-public class Book extends Entity//implements IEntity
+public class Book extends Entity
 {
 	private EBookState state;
 	private String author;

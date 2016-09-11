@@ -6,7 +6,7 @@ import java.util.List;
 import library.entities.Book;
 import library.entities.Loan;
 import library.entities.Member;
-
+//TODO: make sure that a member can't get more than Member.MAX_LOANS loans
 public class LoanDAO extends DAO <Loan>
 {
 	private static LoanDAO instance = null;

@@ -24,6 +24,7 @@ public class Main implements IMainListener
 	private Scanner scanner;
 	private Printer printer;
 	private Display display;
+	public static BorrowUC_CTL ctl;
 
 	public Main()
 	{
@@ -48,16 +49,17 @@ public class Main implements IMainListener
 	@Override
 	public void borrowBooks()
 	{
-		BorrowUC_CTL ctl = new BorrowUC_CTL(reader, scanner, printer, display);
+		//BorrowUC_CTL ctl = new BorrowUC_CTL(reader, scanner, printer, display);
 				// null, null, null);
+		ctl = new BorrowUC_CTL(reader, scanner, printer, display);
         javax.swing.SwingUtilities.invokeLater
         (
 	        new Runnable()
 	        {
 	            public void run()
 	            {
-	            	reader.setEnabled(true);
 	            	ctl.initialise();
+	            	reader.setEnabled(true);
 	            }
 	        }
         );
@@ -135,6 +137,7 @@ public class Main implements IMainListener
             public void run()
             {
             	main.display.setDisplay(new MainPanel(main), "Main Menu");
+            	//main.display.setDisplay(MainPanel.getInstance(main), "Main Menu");
                 main.showGUI();
             }
         });

@@ -1,24 +1,23 @@
 package library.daos;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import library.entities.Entity;
 
 
 public class DAO <X extends Entity>
 {
-	private Map<Integer, X> database;
+	private HashMap<Integer, X> database = new HashMap<Integer, X>();
 
-	public boolean add(X x)
+	public X add(X x)
 	{
 		X testX = database.get(x.getId());
 		if(testX == null)
 		{
 			database.put(x.getId(), x);
-			return true;
 		}
-		return false;
+		return x;
 	}
 
 	public X getById(int id)
@@ -26,8 +25,8 @@ public class DAO <X extends Entity>
 		return database.get(id);
 	}
 
-	public List<X> list() {
-		// TODO Auto-generated method stub
+	public List<X> list()
+	{
 		return null;
 	}
 

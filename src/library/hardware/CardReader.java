@@ -7,6 +7,9 @@ import javax.swing.JTextField;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import library.BorrowUC_CTL;
+import library.CardReaderListener;
+import library.Main;
 import library.interfaces.hardware.ICardReader;
 import library.interfaces.hardware.ICardReaderListener;
 
@@ -17,38 +20,45 @@ import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class CardReader extends JFrame implements ICardReader {
+public class CardReader extends JFrame implements ICardReader
+{
 
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
 	private JButton btnReadCard;
-	private ICardReaderListener listener;
+	private BorrowUC_CTL listener;
 
-	public CardReader() {
+	public CardReader()
+	{
+		//listener = new BorrowUC_CTL(this, null, null, null);
+		//listener = Main.ctl;
+		//urg! the above is null at time of creation...
 		setTitle("Card Reader");
         setBounds(50, 50, 400, 200);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Card Reader", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setBounds(10, 10, 400, 200);
 		getContentPane().add(panel);
 		panel.setLayout(null);
-		
+
 		JLabel lblErrorMesg = new JLabel("");
 		lblErrorMesg.setForeground(Color.RED);
 		lblErrorMesg.setBounds(12, 21, 358, 16);
 		panel.add(lblErrorMesg);
-		
+
 		JLabel lblNewLabel = new JLabel("Enter Member Id:");
 		lblNewLabel.setBounds(30, 50, 150, 25);
 		panel.add(lblNewLabel);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
+
 		textField = new JTextField();
-		textField.addKeyListener(new KeyAdapter() {
+		textField.addKeyListener(new KeyAdapter()
+		{
 			@Override
-			public void keyPressed(KeyEvent arg0) {
+			public void keyPressed(KeyEvent arg0)
+			{
 				lblErrorMesg.setText("");
 			}
 		});
@@ -57,24 +67,31 @@ public class CardReader extends JFrame implements ICardReader {
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textField.setColumns(10);
 		textField.setEditable(false);
-		
+
 		btnReadCard = new JButton("Swipe Card");
-		btnReadCard.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (listener == null) {
+		btnReadCard.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				/*if (listener == null)
+				{
 					throw new RuntimeException("CardReader: listener is null");
-				}
+				}*/
 				String text = textField.getText();
-				try {
+				try
+				{
 					int memberId = new Integer(text).intValue();
-					if (memberId <= 0) {
+					if (memberId <= 0)
+					{
 						throw new NumberFormatException();
 					}
-					listener.cardSwiped(memberId);
+					//listener.cardSwiped(memberId);
+					Main.ctl.cardSwiped(memberId);
 				}
-				catch (NumberFormatException e) {
+				catch (NumberFormatException e)
+				{
 					//e.printStackTrace(System.err);
-					lblErrorMesg.setText("Member Id must be a positive intger");
+					lblErrorMesg.setText("Member Id must be a positive integer");
 				}
 				textField.setText("");
 			}
@@ -95,6 +112,6 @@ public class CardReader extends JFrame implements ICardReader {
 
 	@Override
 	public void addListener(ICardReaderListener listener) {
-		this.listener = listener;		
+		this.listener = (BorrowUC_CTL)listener;
 	}
 }
