@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import library.Main;
 import library.interfaces.hardware.IScanner;
 import library.interfaces.hardware.IScannerListener;
 
@@ -70,10 +71,10 @@ public class Scanner extends JFrame implements IScanner
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				if (listener == null)
+				/*if (listener == null)
 				{
 					throw new RuntimeException("Scanner: listener is null");
-				}
+				}*/
 				String text = textField.getText();
 				try
 				{
@@ -82,7 +83,8 @@ public class Scanner extends JFrame implements IScanner
 					{
 						throw new NumberFormatException();
 					}
-					listener.bookScanned(barcode);
+					//listener.bookScanned(barcode);
+					Main.ctl.bookScanned(barcode);
 				}
 				catch (NumberFormatException e)
 				{

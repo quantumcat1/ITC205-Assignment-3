@@ -1,6 +1,7 @@
 package library;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -56,6 +57,8 @@ public class BorrowUC_CTL implements ICardReaderListener,
 			//not needed, using singletons:
 			//BookDAO bookDAO, LoanDAO loanDAO, MemberDAO memberDAO)
 	{
+		bookList = new LinkedList<Book>();
+		loanList = new LinkedList<Loan>();
 
 		this.display = display;
 		this.ui = new BorrowUC_UI(this);
@@ -71,7 +74,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 
 	public void close()
 	{
-		//display.setDisplay(previous, "Main Menu");
+		display.setDisplay(previous, "Main Menu");
 	}
 
 	@Override
@@ -80,12 +83,14 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		Member member = MemberDAO.getInstance().getById(memberId);
 		if(member == null)
 		{
-			//TODO: show error message
+			//TODO: show error message, member not registered with library
 		}
 		else
 		{
 			borrower = member;
 			ui.displayMemberDetails(memberId, "fred", "857");
+			Main.setEnabled(false, true, false, true);
+			ui.setState(EBorrowState.SCANNING_BOOKS);
 		}
 
 	}
@@ -103,6 +108,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		else
 		{
 			bookList.add(testBook);
+			ui.displayScannedBookDetails("test");
 		}
 		//also need to test that it's available and not damaged etc
 	}

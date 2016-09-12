@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import library.BorrowUC_CTL;
-import library.CardReaderListener;
 import library.Main;
 import library.interfaces.hardware.ICardReader;
 import library.interfaces.hardware.ICardReaderListener;

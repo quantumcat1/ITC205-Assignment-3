@@ -20,10 +20,10 @@ import library.panels.MainPanel;
 
 public class Main implements IMainListener
 {
-	private CardReader reader;
-	private Scanner scanner;
-	private Printer printer;
-	private Display display;
+	private static CardReader reader;
+	private static Scanner scanner;
+	private static Printer printer;
+	private static Display display;
 	public static BorrowUC_CTL ctl;
 
 	public Main()
@@ -34,6 +34,14 @@ public class Main implements IMainListener
 		display = new Display();
 
 		setupTestData();
+	}
+
+	public static void setEnabled (boolean bReader, boolean bScanner, boolean bPrinter, boolean bDisplay)
+	{
+		reader.setEnabled(bReader);
+		scanner.setEnabled(bScanner);
+		printer.setEnabled(bPrinter);
+		display.setEnabled(bDisplay);
 	}
 
 
@@ -59,7 +67,8 @@ public class Main implements IMainListener
 	            public void run()
 	            {
 	            	ctl.initialise();
-	            	reader.setEnabled(true);
+	            	//reader.setEnabled(true);
+	            	setEnabled(true, false, false, true);
 	            }
 	        }
         );
