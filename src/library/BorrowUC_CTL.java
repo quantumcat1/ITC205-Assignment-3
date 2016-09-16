@@ -94,7 +94,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 			ui.displayMemberDetails(memberId, "fred", "857");
 			List<Loan> loans = LoanDAO.getInstance().findLoansByBorrower(borrower);
 			ui.displayExistingLoan(buildLoanListDisplay(loans));
-			Main.setEnabled(false, true, false, true);
+			Main.setEnabled(false, true, false, true); //only main borrow panel and book scanner enabled
 		}
 	}
 
@@ -144,13 +144,16 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	@Override
 	public void scansCompleted()
 	{
-		LoanDAO.getInstance().add(loanList);
+		ui.setState(EBorrowState.CONFIRMING_LOANS);
+		ui.displayConfirmingLoan(buildLoanListDisplay(loanList));
+		Main.setEnabled(false, false, false, true); //only main borrow panel enabled
 	}
 
 	@Override
 	public void loansConfirmed()
 	{
-		throw new RuntimeException("Not implemented yet");
+		//TODO: also change borrow panel state
+		LoanDAO.getInstance().add(loanList);
 	}
 
 	@Override
