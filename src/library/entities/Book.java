@@ -18,6 +18,7 @@ public class Book extends Entity
 		this.author = author;
 		this.title = title;
 		this.callNumber = callNumber;
+		this.state = EBookState.ACCEPTABLE; //assuming if we've just added a book to the library it will be new?
 	}
 	@Override
 	public String toString()
