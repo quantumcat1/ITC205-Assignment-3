@@ -33,7 +33,8 @@ public class EntityTest
 	 * - dueDate gives the correct date
 	 */
 
-	private Member member;
+	private Member member1;
+	private Member member2;
 	/*Will test:
 	 * - if finesPayable works (for no fines or fines)
 	 * - if hasReachedFineLimit works (for has and hasn't)
@@ -70,7 +71,7 @@ public class EntityTest
 		Date notOverDue = cal.getTime();
 
 		//borrowed 2 days in the future:
-		cal = Calendar.getInstance(); //now
+		cal.setTime(now);
 		cal.add(Calendar.DATE, 2);
 		Date borrowedInFuture = cal.getTime();
 
@@ -87,16 +88,27 @@ public class EntityTest
 
 		book1 = new Book("Enid Blyton", "The Faraway Tree", "9781405240925");
 		book2 = new Book("Norman Juster", "The Phantom Tollbooth", "9780394820378");
-		member = new Member("Milo", "Tock", "62225555", "milo@dictionopolis.com");
-		loan_future = new Loan(member, book1, borrowedInFuture);
-		loan_barely_overdue = new Loan(member, book2, justOver);
-		loan_almost_overdue = new Loan(member, book1, soon);
-		loan_overdue = new Loan(member, book2, overdue);
+		member1 = new Member("Milo", "Tock", "62225555", "milo@dictionopolis.com");
+		member2 = new Member("Moon", "Face", "65552222", "moonface@enchanted_wood.org");
+		loan_future = new Loan(member1, book1, borrowedInFuture);
+		loan_barely_overdue = new Loan(member1, book2, justOver);
+		loan_almost_overdue = new Loan(member2, book1, soon);
+		loan_overdue = new Loan(member2, book2, overdue);
 	}
 	@Test
 	public void testDifferentBookIds()
 	{
 		assertEquals(false, book1.getId() == book2.getId());
+	}
+
+	public void testDifferentMemberIds()
+	{
+		assertEquals(false, member1.getId() == member2.getId());
+	}
+
+	public void testDifferentLoanIds()
+	{
+		assertEquals(false, loan_overdue.getId() == loan_future.getId());
 	}
 
 
