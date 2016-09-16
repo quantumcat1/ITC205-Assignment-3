@@ -29,7 +29,7 @@ public class Loan extends Entity
 	{
 		Calendar cal = Calendar.getInstance(); //defaults to now
 		Date now = cal.getTime();
-		return "Loan ID: " + String.valueOf(id) + "\nAuthor: " + book.getAuthor() + "\nBorrower: " + member.fullName() + "\nBorrowed: " + borrowDate + "\nDue Date: " + dueDate(now);
+		return "Loan ID: " + String.valueOf(id) + "\nAuthor: " + book.getAuthor() + "\nTitle: " + book.getTitle() + "\nBorrower: " + member.fullName() + "\nBorrowed: " + borrowDate + "\nDue Date: " + dueDate(now);
 	}
 
 	public boolean checkOverDue(Date currentDate)
