@@ -19,6 +19,11 @@ public class Book extends Entity
 		this.title = title;
 		this.callNumber = callNumber;
 	}
+	@Override
+	public String toString()
+	{
+		return "id: " + String.valueOf(id) + "\nAuthor: " + author + "\nTitle: " + title + "\nCall number: " + callNumber;
+	}
 
 	public void lose()
 	{

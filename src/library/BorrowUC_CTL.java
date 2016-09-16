@@ -108,7 +108,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		else
 		{
 			bookList.add(testBook);
-			ui.displayScannedBookDetails("test");
+			ui.displayScannedBookDetails(testBook.toString());
 		}
 		//also need to test that it's available and not damaged etc
 	}
