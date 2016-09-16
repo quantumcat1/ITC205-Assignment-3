@@ -59,10 +59,4 @@ public class Loan extends Entity
 	{
 		return book;
 	}
-
-	public int getId()
-	{
-		return id;
-	}
-
 }

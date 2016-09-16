@@ -101,11 +101,13 @@ public class EntityTest
 		assertEquals(false, book1.getId() == book2.getId());
 	}
 
+	@Test
 	public void testDifferentMemberIds()
 	{
 		assertEquals(false, member1.getId() == member2.getId());
 	}
 
+	@Test
 	public void testDifferentLoanIds()
 	{
 		assertEquals(false, loan_overdue.getId() == loan_future.getId());
