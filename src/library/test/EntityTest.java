@@ -42,7 +42,7 @@ public class EntityTest
 	 * below zero, exactly zero, or above zero)
 	 */
 
-	EntityTest()
+	public EntityTest()
 	{
 		Calendar cal = Calendar.getInstance();
 		Date now = cal.getTime();
@@ -92,9 +92,12 @@ public class EntityTest
 		loan_barely_overdue = new Loan(member, book2, justOver);
 		loan_almost_overdue = new Loan(member, book1, soon);
 		loan_overdue = new Loan(member, book2, overdue);
-
 	}
-
+	@Test
+	public void testDifferentBookIds()
+	{
+		assertEquals(false, book1.getId() == book2.getId());
+	}
 
 
 }
