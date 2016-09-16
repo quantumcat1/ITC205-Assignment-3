@@ -54,22 +54,12 @@ public class Member extends Entity
 	public boolean addFine(float fine)
 	{
 		float newAmount = fineAmount + fine;
-		if(newAmount > MAX_FINE)
+		if(newAmount > MAX_FINE || newAmount < 0) //including paying off fines (variable "fine" is negative)
 		{
 			return false;
 		}
 		fineAmount = newAmount;
 		return true;
-	}
-
-	public boolean payFine(float payment)
-	{
-		if(payment <= fineAmount)
-		{
-			fineAmount -= payment;
-			return true;
-		}
-		return false;
 	}
 
 	public EMemberState getState()
