@@ -23,6 +23,11 @@ public class Member extends Entity
 		this.emailAddress = emailAddress;
 	}
 
+	public String fullName()
+	{
+		return firstName + " " + lastName;
+	}
+
 	public boolean hasFinesPayable()
 	{
 		if(fineAmount > 0)

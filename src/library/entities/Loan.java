@@ -24,17 +24,30 @@ public class Loan extends Entity
 		this.borrowDate = borrowDate;
 	}
 
+	@Override
+	public String toString()
+	{
+		Calendar cal = Calendar.getInstance(); //defaults to now
+		Date now = cal.getTime();
+		return "Loan ID: " + String.valueOf(id) + "\nAuthor: " + book.getAuthor() + "\nBorrower: " + member.fullName() + "\nBorrowed: " + borrowDate + "\nDue Date: " + dueDate(now);
+	}
+
 	public boolean checkOverDue(Date currentDate)
 	{
-		Calendar c = Calendar.getInstance();
-		c.setTime(borrowDate);
-		c.add(Calendar.DATE, LOAN_PERIOD);
-		Date dueDate = c.getTime();
+		Date dueDate = dueDate(currentDate);
 		if(currentDate.after(dueDate))
 		{
 			return true;
 		}
 		return false;
+	}
+
+	public Date dueDate(Date currentDate)
+	{
+		Calendar c = Calendar.getInstance();
+		c.setTime(borrowDate);
+		c.add(Calendar.DATE, LOAN_PERIOD);
+		return c.getTime();
 	}
 
 	public Member getMember()

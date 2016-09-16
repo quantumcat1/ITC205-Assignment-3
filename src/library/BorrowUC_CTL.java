@@ -1,6 +1,8 @@
 package library;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,7 +48,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 
 	//temporary ones until they are confirmed and sent to the daos (I think):
 	private List<Book> bookList; //books scanned awaiting confirmation of loan?
-	private List<Loan> loanList; //not sure what this is for
+	private List<Loan> loanList; //to show pending loans
 	private Member borrower; //borrower whose card we scanned?
 
 	private JPanel previous;
@@ -107,8 +109,15 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		}
 		else
 		{
+			//need to check it's not on loan already (or disposed or damaged) as well, and if it's not, then do the following.
 			bookList.add(testBook);
-			ui.displayScannedBookDetails(testBook.toString());
+			ui.displayScannedBookDetails(bookList.get(bookList.size()-1).toString());
+			//also need to display in pending loans
+			//aha so that's what the loans list variable is for ....
+			Calendar cal = Calendar.getInstance(); //defaults to now
+			Date now = cal.getTime();
+			loanList.add(new Loan(borrower, testBook, now));
+			ui.displayPendingLoan(buildLoanListDisplay(loanList));
 		}
 		//also need to test that it's available and not damaged etc
 	}
@@ -146,10 +155,10 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	private String buildLoanListDisplay(List<Loan> loans)
 	{
 		StringBuilder bld = new StringBuilder();
-		for (Loan ln : loans)
+		for (Loan loan : loans)
 		{
 			if (bld.length() > 0) bld.append("\n\n");
-			bld.append(ln.toString());
+			bld.append(loan.toString());
 		}
 		return bld.toString();
 	}
