@@ -1,6 +1,5 @@
 package library.daos;
 
-import java.util.Date;
 import java.util.List;
 
 import library.entities.Book;
@@ -20,11 +19,6 @@ public class LoanDAO extends DAO <Loan>
 		return instance;
 	}
 
-	//TODO: find out what the purpose of "commit" is and whether it's important
-	public void commitLoan(Loan loan)
-	{
-	}
-
 
 	public Loan getLoanByBook(Book book) {
 		// TODO Auto-generated method stub
@@ -41,11 +35,6 @@ public class LoanDAO extends DAO <Loan>
 	{
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public void updateOverDueStatus(Date currentDate)
-	{
-		// TODO Auto-generated method stub
 	}
 
 	public List<Loan> findOverDueLoans()

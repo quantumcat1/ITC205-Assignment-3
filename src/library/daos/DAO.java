@@ -20,6 +20,14 @@ public class DAO <X extends Entity>
 		return x;
 	}
 
+	public void add(List<X> list)
+	{
+		for(X x: list)
+		{
+			add(x);
+		}
+	}
+
 	public X getById(int id)
 	{
 		return database.get(id);
