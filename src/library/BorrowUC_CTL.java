@@ -89,15 +89,14 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		}
 		else
 		{
+			ui.setState(EBorrowState.SCANNING_BOOKS);
 			borrower = member;
 			ui.displayMemberDetails(memberId, "fred", "857");
+			List<Loan> loans = LoanDAO.getInstance().findLoansByBorrower(borrower);
+			ui.displayExistingLoan(buildLoanListDisplay(loans));
 			Main.setEnabled(false, true, false, true);
-			ui.setState(EBorrowState.SCANNING_BOOKS);
 		}
-
 	}
-
-
 
 	@Override
 	public void bookScanned(int id)
@@ -145,7 +144,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	@Override
 	public void scansCompleted()
 	{
-		throw new RuntimeException("Not implemented yet");
+		LoanDAO.getInstance().add(loanList);
 	}
 
 	@Override

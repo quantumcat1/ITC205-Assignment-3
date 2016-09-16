@@ -1,6 +1,9 @@
 package library.daos;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import library.entities.Book;
 import library.entities.Loan;
@@ -27,8 +30,15 @@ public class LoanDAO extends DAO <Loan>
 
 	public List<Loan> findLoansByBorrower(Member borrower)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<Loan> list = new LinkedList<Loan>();
+		for(Loan loan : database.values())
+		{
+			if(loan.getMember().getId() == borrower.getId())
+			{
+				list.add(loan);
+			}
+		}
+		return list;
 	}
 
 	public List<Loan> findLoansByBookTitle(String title)

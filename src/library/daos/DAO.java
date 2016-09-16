@@ -8,7 +8,8 @@ import library.entities.Entity;
 
 public class DAO <X extends Entity>
 {
-	private HashMap<Integer, X> database = new HashMap<Integer, X>();
+	protected HashMap<Integer, X> database = new HashMap<Integer, X>();
+
 
 	public X add(X x)
 	{
