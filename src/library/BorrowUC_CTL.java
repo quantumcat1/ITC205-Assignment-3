@@ -102,24 +102,32 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	@Override
 	public void bookScanned(int id)
 	{
-		Book testBook = BookDAO.getInstance().getById(id);
-		if(testBook == null)
+		Book book = BookDAO.getInstance().getById(id);
+		if(book == null)
 		{
 			//TODO: book doesn't exist, do something here
 		}
+		else if(LoanDAO.getInstance().getLoanByBook(book) == null) //not already on loan
+		{
+			if(book.getState() == EBookState.ACCEPTABLE) //exists, not on loan, in good enough condition to borrow
+			{
+				bookList.add(book);
+				ui.displayScannedBookDetails(bookList.get(bookList.size()-1).toString());
+
+				Calendar cal = Calendar.getInstance();
+				Date now = cal.getTime();
+				loanList.add(new Loan(borrower, book, now));
+				ui.displayPendingLoan(buildLoanListDisplay(loanList));
+			}
+			else
+			{
+				//TODO: error message because book is damaged or disposed
+			}
+		}
 		else
 		{
-			//need to check it's not on loan already (or disposed or damaged) as well, and if it's not, then do the following.
-			bookList.add(testBook);
-			ui.displayScannedBookDetails(bookList.get(bookList.size()-1).toString());
-			//also need to display in pending loans
-			//aha so that's what the loans list variable is for ....
-			Calendar cal = Calendar.getInstance(); //defaults to now
-			Date now = cal.getTime();
-			loanList.add(new Loan(borrower, testBook, now));
-			ui.displayPendingLoan(buildLoanListDisplay(loanList));
+			//TODO: error message because book is on loan
 		}
-		//also need to test that it's available and not damaged etc
 	}
 
 
