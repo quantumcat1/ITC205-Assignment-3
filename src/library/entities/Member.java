@@ -51,6 +51,11 @@ public class Member extends Entity
 		return fineAmount;
 	}
 
+	public void setFineAmount(float fineAmount)
+	{
+		this.fineAmount = fineAmount;
+	}
+
 	public boolean addFine(float fine)
 	{
 		float newAmount = fineAmount + fine;
