@@ -45,17 +45,16 @@ public class BookDAO extends DAO <Book>
 		return list;
 	}
 
-	public List<Book> findBooksByAuthorTitle(String author, String title)
+	public Book findBooksByAuthorTitle(String author, String title)
 	{
-		List<Book> list = new LinkedList<Book>();
 		for(Book book : database.values())
 		{
 			if(book.getAuthor() == author && book.getTitle() == title)
 			{
-				list.add(book);
+				return book;
 			}
 		}
-		return list;
+		return null;
 	}
 
 }
