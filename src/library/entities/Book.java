@@ -54,6 +54,11 @@ public class Book extends Entity
 		return state;
 	}
 
+	public void setState(EBookState state)
+	{
+		this.state = state;
+	}
+
 	public String getAuthor()
 	{
 		return author;
