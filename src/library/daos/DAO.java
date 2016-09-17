@@ -29,6 +29,14 @@ public class DAO <X extends Entity>
 		}
 	}
 
+	public void add(X[] list)
+	{
+		for(X x: list)
+		{
+			add(x);
+		}
+	}
+
 	public X getById(int id)
 	{
 		return database.get(id);

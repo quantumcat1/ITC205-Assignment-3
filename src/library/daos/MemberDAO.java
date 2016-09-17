@@ -44,16 +44,15 @@ public class MemberDAO extends DAO <Member>
 		return list;
 	}
 
-	public List<Member> findMembersByNames(String firstName, String lastName)
+	public Member findMembersByNames(String firstName, String lastName)
 	{
-		List<Member> list = new LinkedList<Member>();
 		for(Member member : database.values())
 		{
 			if(member.getLastName() == lastName && member.getFirstName() == firstName)
 			{
-				list.add(member);
+				return member;
 			}
 		}
-		return list;
+		return null;
 	}
 }
