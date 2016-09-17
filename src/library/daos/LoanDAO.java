@@ -25,17 +25,16 @@ public class LoanDAO extends DAO <Loan>
 	}
 
 
-	public List<Loan> getLoanByBook(Book book)
+	public Loan getLoanByBook(Book book)
 	{
-		List<Loan> list = new LinkedList<Loan>();
 		for(Loan loan : database.values())
 		{
 			if(loan.getBook().getId() == book.getId())
 			{
-				list.add(loan);
+				return loan;
 			}
 		}
-		return list;
+		return null;
 	}
 
 	public List<Loan> findLoansByBorrower(Member borrower)
