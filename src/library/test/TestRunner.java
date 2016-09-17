@@ -13,6 +13,12 @@ public class TestRunner
 		{
 			System.out.println(failure.toString());
 		}
-		System.out.println("Unit testing success: " + result.wasSuccessful());
+		System.out.println("Entity unit testing success: " + result.wasSuccessful());
+		result = JUnitCore.runClasses(EntityTest.class);
+		for(Failure failure : result.getFailures())
+		{
+			System.out.println(failure.toString());
+		}
+		System.out.println("DAO unit testing success: " + result.wasSuccessful());
 	}
 }

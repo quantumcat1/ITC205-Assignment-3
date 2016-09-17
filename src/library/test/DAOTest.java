@@ -6,12 +6,15 @@ import org.mockito.Mock;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import library.daos.BookDAO;
 import library.daos.LoanDAO;
 import library.daos.MemberDAO;
 import library.entities.Book;
+import library.entities.Loan;
 import library.entities.Member;
 
 public class DAOTest
@@ -31,11 +34,11 @@ public class DAOTest
 	 * -DONE search by author and title
 	 *
 	 * LoanDAO
-	 * -search by loan
-	 * -search by member
-	 * -search by book
-	 * -search by book title
-	 * -find overdue loans
+	 * -DONE search by loan
+	 * -DONE search by member
+	 * -DONE search by book
+	 * -DONE search by book title
+	 * -DONE find overdue loans
 	 *
 	 * MemberDAO
 	 * -DONE search by member
@@ -45,15 +48,23 @@ public class DAOTest
 	 *
 	 */
 
+	Book book1 = mock(Book.class);
+	Book book2 = mock(Book.class);
+	Book book3 = mock(Book.class);
+	Book book4 = mock(Book.class);
+	Book book5 = mock(Book.class);
+
+	Member member1 = mock(Member.class);
+	Member member2 = mock(Member.class);
+	Member member3 = mock(Member.class);
+	Member member4 = mock(Member.class);
+
+	Loan loan1 = mock(Loan.class);
+	Loan loan2 = mock(Loan.class);
+	Loan loan3 = mock(Loan.class);
+
 	public DAOTest()
 	{
-		//don't know how to make an array of mock objects so just have to declare them one by one.
-		Book book1 = mock(Book.class);
-		Book book2 = mock(Book.class);
-		Book book3 = mock(Book.class);
-		Book book4 = mock(Book.class);
-		Book book5 = mock(Book.class);
-
 		when(book1.getTitle()).thenReturn("Ender's Game");
 		when(book2.getTitle()).thenReturn("Speaker For The Dead");
 		when(book3.getTitle()).thenReturn("Darwin's Radio");
@@ -76,11 +87,6 @@ public class DAOTest
 
 		BookDAO.getInstance().add(bookList);
 
-		Member member1 = mock(Member.class);
-		Member member2 = mock(Member.class);
-		Member member3 = mock(Member.class);
-		Member member4 = mock(Member.class);
-
 		when(member1.getId()).thenReturn(0);
 		when(member2.getId()).thenReturn(1);
 		when(member3.getId()).thenReturn(2);
@@ -100,6 +106,85 @@ public class DAOTest
 		when(member2.getEmailAddress()).thenReturn("locke@newsnet.com");
 		when(member3.getEmailAddress()).thenReturn("mitch@sheva.org");
 		when(member4.getEmailAddress()).thenReturn("goldfish@rainbowfizz.net");
+
+		when(loan1.getMember()).thenReturn(member1);
+		when(loan1.getBook()).thenReturn(book2);
+		when(loan2.getMember()).thenReturn(member1);
+		when(loan2.getBook()).thenReturn(book3);
+		when(loan3.getMember()).thenReturn(member3);
+		when(loan3.getBook()).thenReturn(book4);
+
+		when(loan1.getId()).thenReturn(0);
+		when(loan2.getId()).thenReturn(1);
+		when(loan3.getId()).thenReturn(2);
+
+		Calendar cal = Calendar.getInstance();
+		Date now = cal.getTime();
+
+		when(loan1.checkOverDue(now)).thenReturn(true);
+		when(loan2.checkOverDue(now)).thenReturn(true);
+		when(loan3.checkOverDue(now)).thenReturn(false);
+	}
+
+	@Test
+	public void testFindOverDueLoans()
+	{
+		List<Loan> loanList = LoanDAO.getInstance().findOverDueLoans();
+		assertEquals(2, loanList.size());
+		if(loanList.get(0).getBook().getId() == book2.getId())
+		{
+			assertEquals(book3.getId(), loanList.get(1).getBook().getId());
+		}
+		else if(loanList.get(0).getBook().getId() == book3.getId())
+		{
+			assertEquals(book2.getId(), loanList.get(1).getBook().getId());
+		}
+		else
+		{
+			assertEquals(true, false); // has to be both loans, one or the other way around
+		}
+	}
+
+	@Test
+	public void testSearchByBookTitleLoanDAO()
+	{
+		List<Loan> loanList = LoanDAO.getInstance().findLoansByBookTitle("Speaker For The Dead");
+		assertEquals(1, loanList.size());
+		assertEquals(member3, loanList.get(0).getMember());
+	}
+
+	@Test
+	public void testSearchByBookLoanDAO()
+	{
+		Loan loan = LoanDAO.getInstance().getLoanByBook(book4);
+		assertEquals(member3, loan.getMember());
+	}
+
+	@Test
+	public void testSearchByMemberLoanDAO()
+	{
+		List<Loan> loanList = LoanDAO.getInstance().findLoansByBorrower(member1);
+		assertEquals(2, loanList.size());
+		if(loanList.get(0).getBook().getId() == book2.getId())
+		{
+			assertEquals(book3.getId(), loanList.get(1).getBook().getId());
+		}
+		else if(loanList.get(0).getBook().getId() == book3.getId())
+		{
+			assertEquals(book2.getId(), loanList.get(1).getBook().getId());
+		}
+		else
+		{
+			assertEquals(true, false); // has to be both members, one or the other way around
+		}
+	}
+
+	@Test
+	public void testSearchByLoanLoanDAO()
+	{
+		Loan loan = LoanDAO.getInstance().getById(1);
+		assertEquals(member1, loan.getMember());
+		assertEquals(book3, loan.getBook());
 	}
 
 	@Test
