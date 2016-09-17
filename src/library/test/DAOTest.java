@@ -8,7 +8,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-import library.Main;
 import library.daos.BookDAO;
 import library.daos.LoanDAO;
 import library.daos.MemberDAO;
@@ -25,10 +24,10 @@ public class DAOTest
 	 * To test:
 	 *
 	 * BookDAO
-	 * -search by title
-	 * -search by author
-	 * -search by book
-	 * -search by author and title
+	 * -DONE search by title
+	 * -DONE search by author
+	 * -DONE search by book
+	 * -DONE search by author and title
 	 *
 	 * LoanDAO
 	 * -search by loan
@@ -66,9 +65,30 @@ public class DAOTest
 		when(book4.getAuthor()).thenReturn("Greg Bear");
 		when(book5.getAuthor()).thenReturn("Jostein Gaarder");
 
+		when(book1.getId()).thenReturn(0);
+		when(book2.getId()).thenReturn(1);
+		when(book3.getId()).thenReturn(2);
+		when(book4.getId()).thenReturn(3);
+		when(book5.getId()).thenReturn(4);
+
 		Book[] bookList = {book1, book2, book3, book4, book5};
 
 		BookDAO.getInstance().add(bookList);
+	}
+
+	@Test
+	public void testSearchByAuthorAndTitle()
+	{
+		Book book = BookDAO.getInstance().findBooksByAuthorTitle("Jostein Gaarder", "Solitaire Mystery");
+		assertEquals(4, book.getId());
+	}
+
+	@Test
+	public void testSearchByBook()
+	{
+		Book book = BookDAO.getInstance().getById(4);
+		assertEquals("Jostein Gaarder", book.getAuthor());
+		assertEquals("Solitaire Mystery", book.getTitle());
 	}
 
 	@Test
@@ -77,5 +97,19 @@ public class DAOTest
 		List<Book> bookList = BookDAO.getInstance().findBooksByTitle("Ender's Game");
 		assertEquals(1, bookList.size());
 		assertEquals("Orson Scott Card", bookList.get(0).getAuthor());
+	}
+	@Test
+	public void testSearchByAuthorBookDAO()
+	{
+		List<Book> bookList = BookDAO.getInstance().findBooksByAuthor("Greg Bear");
+		assertEquals(2, bookList.size());
+		if(bookList.get(0).getTitle().equals("Darwin's Radio"))
+		{
+			assertEquals("Darwin's Children", bookList.get(1).getTitle());
+		}
+		else if(bookList.get(0).getTitle().equals("Darwin's Children"))
+		{
+			assertEquals("Darwin's Radio", bookList.get(1).getTitle());
+		}
 	}
 }
