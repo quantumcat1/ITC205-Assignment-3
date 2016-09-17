@@ -10,15 +10,20 @@ import java.util.Calendar;
 import java.util.Date;
 
 import library.entities.*;
+import library.enums.EBookState;
 
 public class EntityTest
 {
-	private Book book1;
-	private Book book2;
+	private Book book1; //acceptable
+	private Book book2; //damaged
+	private Book book3; //disposed
 	/*Will test:
-	*- whether making more than one books results in a different id
-	*- "repair" only turns a non-loaned damaged book into an acceptable book and doesn't change the state otherwise
-	*- "dispose" only turns a damaged book into a disposed book and doesn't touch the state otherwise
+	*- DONE whether making more than one books results in a different id
+	*- DONE They should be 'acceptable' condition upon being created
+	*- DONE "repair" only turns a damaged book into an acceptable book and doesn't change the state otherwise
+	*whether it is on loan is outside the scope of the test - the book itself does not know if
+	*it is on loan.
+	*- DONE "dispose" only turns a damaged book into a disposed book and doesn't touch the state otherwise
 	**/
 
 	private Loan loan_future;
@@ -26,7 +31,7 @@ public class EntityTest
 	private Loan loan_almost_overdue;
 	private Loan loan_barely_overdue;
 	/*Will test:
-	 * - whether making more than one loan results in them having different ids
+	 * - DONE whether making more than one loan results in them having different ids
 	 * - checkOverdue works in several cases (overdue a long time ago, overdue same
 	 * day (slightly before or slightly after borrow date, currently on loan but not
 	 * due(borrow date in past but overdue date in future), not yet borrowed.
@@ -36,6 +41,7 @@ public class EntityTest
 	private Member member1;
 	private Member member2;
 	/*Will test:
+	 * - DONE if different members have different ids
 	 * - if finesPayable works (for no fines or fines)
 	 * - if hasReachedFineLimit works (for has and hasn't)
 	 * - if addFine works (for adding fines for the result to be over or under
@@ -86,8 +92,15 @@ public class EntityTest
 		assertEquals(true, notOverDue.before(borrowedInFuture));
 
 
-		book1 = new Book("Enid Blyton", "The Faraway Tree", "9781405240925");
+		book1 = new Book("John Wyndam", "Day Of The Triffids", "100812967127");
 		book2 = new Book("Norman Juster", "The Phantom Tollbooth", "9780394820378");
+		book3 = new Book("Jostein Gaarder", "Sophie's World", "9781427200860");
+		assertEquals(true, book1.getState() == EBookState.ACCEPTABLE);
+		assertEquals(true, book2.getState() == EBookState.ACCEPTABLE);
+		assertEquals(true, book3.getState() == EBookState.ACCEPTABLE);
+
+		book2.setState(EBookState.DAMAGED);
+		book3.setState(EBookState.DISPOSED);
 		member1 = new Member("Milo", "Tock", "62225555", "milo@dictionopolis.com");
 		member2 = new Member("Moon", "Face", "65552222", "moonface@enchanted_wood.org");
 		loan_future = new Loan(member1, book1, borrowedInFuture);
@@ -95,6 +108,7 @@ public class EntityTest
 		loan_almost_overdue = new Loan(member2, book1, soon);
 		loan_overdue = new Loan(member2, book2, overdue);
 	}
+
 	@Test
 	public void testDifferentBookIds()
 	{
@@ -113,5 +127,43 @@ public class EntityTest
 		assertEquals(false, loan_overdue.getId() == loan_future.getId());
 	}
 
+	@Test
+	public void testRepair()
+	{
+		EBookState stateBook1 = book1.getState();
+		EBookState stateBook2 = book2.getState();
+		EBookState stateBook3 = book3.getState();
 
+		book1.repair();
+		book2.repair();
+		book3.repair();
+		assertEquals(true, book1.getState() == EBookState.ACCEPTABLE);
+		assertEquals(true, book2.getState() == EBookState.ACCEPTABLE);
+		assertEquals(true, book3.getState() == EBookState.DISPOSED); //can't repair a book that has been thrown away
+
+		//put back to state before the test
+		book1.setState(stateBook1);
+		book2.setState(stateBook2);
+		book3.setState(stateBook3);
+	}
+
+	@Test
+	public void testDispose()
+	{
+		EBookState stateBook1 = book1.getState();
+		EBookState stateBook2 = book2.getState();
+		EBookState stateBook3 = book3.getState();
+
+		book1.dispose();
+		book2.dispose();
+		book3.dispose();
+		assertEquals(true, book1.getState() == EBookState.ACCEPTABLE); //can't throw away a good book
+		assertEquals(true, book2.getState() == EBookState.DISPOSED);
+		assertEquals(true, book3.getState() == EBookState.DISPOSED);
+
+		//put back to state before the test
+		book1.setState(stateBook1);
+		book2.setState(stateBook2);
+		book3.setState(stateBook3);
+	}
 }
