@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import library.entities.*;
 import library.enums.EBookState;
@@ -30,12 +31,13 @@ public class EntityTest
 	private Loan loan_overdue;
 	private Loan loan_almost_overdue;
 	private Loan loan_barely_overdue;
+	private Date now;
 	/*Will test:
 	 * - DONE whether making more than one loan results in them having different ids
-	 * - checkOverdue works in several cases (overdue a long time ago, overdue same
+	 * - DONE checkOverdue works in several cases (overdue a long time ago, overdue same
 	 * day (slightly before or slightly after borrow date, currently on loan but not
 	 * due(borrow date in past but overdue date in future), not yet borrowed.
-	 * - dueDate gives the correct date
+	 * - DONE dueDate gives the correct date
 	 */
 
 	private Member member1;
@@ -52,7 +54,7 @@ public class EntityTest
 	public EntityTest()
 	{
 		Calendar cal = Calendar.getInstance();
-		Date now = cal.getTime();
+		now = cal.getTime();
 
 		//minus loan period from now so it's exactly overdue
 		cal.add(Calendar.DATE, -1*(Loan.LOAN_PERIOD));
@@ -83,13 +85,14 @@ public class EntityTest
 
 		/*let's check our dates are what we expect.
 		*earliest ... latest
-		*overdue - justOver - exactlyOverDue - soon - notOverDue - borrowedInFuture
+		*overdue - justOver - exactlyOverDue - soon - notOverDue - now - borrowedInFuture
 		*/
 		assertEquals(true, overdue.before(justOver));
 		assertEquals(true, justOver.before(exactlyOverDue));
 		assertEquals(true, exactlyOverDue.before(soon));
 		assertEquals(true, soon.before(notOverDue));
-		assertEquals(true, notOverDue.before(borrowedInFuture));
+		assertEquals(true, notOverDue.before(now));
+		assertEquals(true, now.before(borrowedInFuture));
 
 
 		book1 = new Book("John Wyndam", "Day Of The Triffids", "100812967127");
@@ -165,5 +168,43 @@ public class EntityTest
 		book1.setState(stateBook1);
 		book2.setState(stateBook2);
 		book3.setState(stateBook3);
+	}
+
+	@Test
+	public void testCheckOverDue()
+	{
+		boolean overdue = loan_future.checkOverDue(now);
+		assertEquals(false, overdue);
+
+		overdue = loan_overdue.checkOverDue(now);
+		assertEquals(true, overdue);
+
+		overdue = loan_almost_overdue.checkOverDue(now);
+		assertEquals(false, overdue);
+
+		overdue = loan_barely_overdue.checkOverDue(now);
+		assertEquals(true, overdue);
+	}
+
+	@Test
+	public void testDueDate()
+	{
+		/*The only way to test the due dates of the Loan member variables would
+		 * be to repeat the exact same code in the due date method (adding a loan
+		 * period to the borrow date). This would be a complete waste of time. So
+		 * I will make a new loan variable and set dates manually (instead of
+		 * them being gotten at runtime).
+		 */
+
+		Calendar cal = new GregorianCalendar(2015,7,13); //13th August 2015
+		Date borrowDate = cal.getTime();
+
+		Loan testLoan = new Loan(member1, book2, borrowDate);
+		Date dueDate = testLoan.dueDate();
+
+		cal.add(Calendar.DATE, Loan.LOAN_PERIOD);
+		Date expectedDueDate = cal.getTime();
+
+		assertEquals(true, dueDate.equals(expectedDueDate));
 	}
 }
