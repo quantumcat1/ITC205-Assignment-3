@@ -40,13 +40,14 @@ public class EntityTest
 	 * - DONE dueDate gives the correct date
 	 */
 
-	private Member member1;
-	private Member member2;
+	private Member member1; //no fines
+	private Member member2; //some fines but less than max fines
 	/*Will test:
 	 * - DONE if different members have different ids
-	 * - if finesPayable works (for no fines or fines)
-	 * - if hasReachedFineLimit works (for has and hasn't)
-	 * - if addFine works (for adding fines for the result to be over or under
+	 * - DONE should have zero fines on creation
+	 * - DONE if finesPayable works (for no fines or fines)
+	 * - DONE if hasReachedFineLimit works (for 0 fine, some fine, exactly max fine and over max fine)
+	 * - DONE if addFine works (for adding fines for the result to be over or under
 	 * max fine and exactly max fine, and for paying fines, reducing it to
 	 * below zero, exactly zero, or above zero)
 	 */
@@ -104,12 +105,82 @@ public class EntityTest
 
 		book2.setState(EBookState.DAMAGED);
 		book3.setState(EBookState.DISPOSED);
+
 		member1 = new Member("Milo", "Tock", "62225555", "milo@dictionopolis.com");
 		member2 = new Member("Moon", "Face", "65552222", "moonface@enchanted_wood.org");
+		assertEquals(true, member1.getFineAmount() == 0);
+		assertEquals(true, member2.getFineAmount() == 0);
+
+		member2.addFine(Member.MAX_FINE/2);
+
 		loan_future = new Loan(member1, book1, borrowedInFuture);
 		loan_barely_overdue = new Loan(member1, book2, justOver);
 		loan_almost_overdue = new Loan(member2, book1, soon);
 		loan_overdue = new Loan(member2, book2, overdue);
+	}
+
+	@Test
+	public void testAddFine()
+	{
+		float fine1 = member1.getFineAmount();
+		float fine2 = member2.getFineAmount();
+
+		member1.addFine(Member.MAX_FINE + 1);
+		assertEquals(true, fine1 == member1.getFineAmount()); //should be unchanged, as we can't add beyond max fine
+
+		float fineAmountShortOfMax = Member.MAX_FINE - fine2;
+		assertEquals(true, fineAmountShortOfMax > 0);
+		member2.addFine(fineAmountShortOfMax/2); //add some, but not enough to pass max fine
+		assertEquals(true, member2.getFineAmount() == (fine2 + fineAmountShortOfMax/2)); //should have successfully added
+
+		//put back to what it was
+		member1.setFineAmount(fine1);
+		member2.setFineAmount(fine2);
+
+		member1.addFine(fine1*-2); //try to rrdce below zero
+		member2.addFine(fine2*-1); //reduce to actually zero
+		assertEquals(true, member1.getFineAmount() == fine1); //should not have been successful
+		assertEquals(true, member1.getFineAmount() == 0); //should have reduced to zero
+
+		//set back to what it was before the test
+		member1.setFineAmount(fine1);
+		member2.setFineAmount(fine2);
+	}
+
+	@Test
+	public void testFinesPayable()
+	{
+		boolean hasFine = member1.hasFinesPayable();
+		assertEquals(false, hasFine);
+
+		hasFine = member2.hasFinesPayable();
+		assertEquals(true, hasFine);
+	}
+
+	@Test
+	public void testHasReachedFineLimit()
+	{
+		float fine1 = member1.getFineAmount();
+		float fine2 = member2.getFineAmount();
+
+		boolean hasReachedLimit1 = member1.hasReachedFineLimit();
+		boolean hasReachedLimit2 = member2.hasReachedFineLimit();
+
+		assertEquals(false, hasReachedLimit1);
+		assertEquals(false, hasReachedLimit2);
+
+		member1.setFineAmount(Member.MAX_FINE);
+		member2.setFineAmount(Member.MAX_FINE + 1);
+
+		hasReachedLimit1 = member1.hasReachedFineLimit();
+		hasReachedLimit2 = member2.hasReachedFineLimit();
+
+		assertEquals(true, hasReachedLimit1);
+		assertEquals(true, hasReachedLimit2);
+
+		//set it back to what it was before the test
+		member1.setFineAmount(fine1);
+		member2.setFineAmount(fine2);
 	}
 
 	@Test
@@ -196,7 +267,7 @@ public class EntityTest
 		 * them being gotten at runtime).
 		 */
 
-		Calendar cal = new GregorianCalendar(2015,7,13); //13th August 2015
+		Calendar cal = new GregorianCalendar(2016,7,13); //13th August 2015
 		Date borrowDate = cal.getTime();
 
 		Loan testLoan = new Loan(member1, book2, borrowDate);
