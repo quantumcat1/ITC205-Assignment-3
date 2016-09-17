@@ -27,14 +27,12 @@ public class Loan extends Entity
 	@Override
 	public String toString()
 	{
-		Calendar cal = Calendar.getInstance(); //defaults to now
-		Date now = cal.getTime();
-		return "Loan ID: " + String.valueOf(id) + "\nAuthor: " + book.getAuthor() + "\nTitle: " + book.getTitle() + "\nBorrower: " + member.fullName() + "\nBorrowed: " + borrowDate + "\nDue Date: " + dueDate(now);
+		return "Loan ID: " + String.valueOf(id) + "\nAuthor: " + book.getAuthor() + "\nTitle: " + book.getTitle() + "\nBorrower: " + member.fullName() + "\nBorrowed: " + borrowDate + "\nDue Date: " + dueDate();
 	}
 
 	public boolean checkOverDue(Date currentDate)
 	{
-		Date dueDate = dueDate(currentDate);
+		Date dueDate = dueDate();
 		if(currentDate.after(dueDate))
 		{
 			return true;
@@ -42,7 +40,7 @@ public class Loan extends Entity
 		return false;
 	}
 
-	public Date dueDate(Date currentDate)
+	public Date dueDate()
 	{
 		Calendar c = Calendar.getInstance();
 		c.setTime(borrowDate);
