@@ -1,5 +1,7 @@
 package library.daos;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,9 +25,17 @@ public class LoanDAO extends DAO <Loan>
 	}
 
 
-	public Loan getLoanByBook(Book book) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Loan> getLoanByBook(Book book)
+	{
+		List<Loan> list = new LinkedList<Loan>();
+		for(Loan loan : database.values())
+		{
+			if(loan.getBook().getId() == book.getId())
+			{
+				list.add(loan);
+			}
+		}
+		return list;
 	}
 
 	public List<Loan> findLoansByBorrower(Member borrower)
@@ -43,14 +53,30 @@ public class LoanDAO extends DAO <Loan>
 
 	public List<Loan> findLoansByBookTitle(String title)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<Loan> list = new LinkedList<Loan>();
+		for(Loan loan : database.values())
+		{
+			if(loan.getBook().getTitle() == title)
+			{
+				list.add(loan);
+			}
+		}
+		return list;
 	}
 
 	public List<Loan> findOverDueLoans()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Calendar cal = Calendar.getInstance();
+		Date now = cal.getTime();
+		List<Loan> list = new LinkedList<Loan>();
+		for(Loan loan : database.values())
+		{
+			if(loan.checkOverDue(now))
+			{
+				list.add(loan);
+			}
+		}
+		return list;
 	}
 
 }

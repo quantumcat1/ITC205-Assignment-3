@@ -1,8 +1,10 @@
 package library.daos;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import library.entities.Book;
+import library.entities.Member;
 
 public class BookDAO extends DAO <Book>
 {
@@ -19,17 +21,41 @@ public class BookDAO extends DAO <Book>
 
 	public List<Book> findBooksByAuthor(String author)
 	{
-		return null;
+		List<Book> list = new LinkedList<Book>();
+		for(Book book : database.values())
+		{
+			if(book.getAuthor() == author)
+			{
+				list.add(book);
+			}
+		}
+		return list;
 	}
 
 	public List<Book> findBooksByTitle(String title)
 	{
-		return null;
+		List<Book> list = new LinkedList<Book>();
+		for(Book book : database.values())
+		{
+			if(book.getTitle() == title)
+			{
+				list.add(book);
+			}
+		}
+		return list;
 	}
 
 	public List<Book> findBooksByAuthorTitle(String author, String title)
 	{
-		return null;
+		List<Book> list = new LinkedList<Book>();
+		for(Book book : database.values())
+		{
+			if(book.getAuthor() == author && book.getTitle() == title)
+			{
+				list.add(book);
+			}
+		}
+		return list;
 	}
 
 }
