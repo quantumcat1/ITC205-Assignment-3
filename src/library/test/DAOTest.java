@@ -52,11 +52,13 @@ public class DAOTest
 	Book book3;
 	Book book4;
 	Book book5;
+	Book testBook;
 
 	Member member1;
 	Member member2;
 	Member member3;
 	Member member4;
+	Member testMember;
 
 	Loan loan1;
 	Loan loan2;
@@ -69,16 +71,30 @@ public class DAOTest
 
 	public void initialise()
 	{
+		/*
+		 * Clear anything from previous tests.
+		 * (I know this one gets run first,
+		 * so this wouldn't matter, but best
+		 * to be flexible)
+		 */
+		BookDAO.getInstance().clear();
+		MemberDAO.getInstance().clear();
+		LoanDAO.getInstance().clear();
+
 		book1 = mock(Book.class);
 		book2 = mock(Book.class);
 		book3 = mock(Book.class);
 		book4 = mock(Book.class);
 		book5 = mock(Book.class);
 
+		testBook = mock(Book.class); //will not be added to DAOs
+
 		member1 = mock(Member.class);
 		member2 = mock(Member.class);
 		member3 = mock(Member.class);
 		member4 = mock(Member.class);
+
+		testMember = mock(Member.class); //will not be added to DAOs
 
 		loan1 = mock(Loan.class);
 		loan2 = mock(Loan.class);
@@ -89,42 +105,51 @@ public class DAOTest
 		when(book3.getTitle()).thenReturn("Darwin's Radio");
 		when(book4.getTitle()).thenReturn("Darwin's Children");
 		when(book5.getTitle()).thenReturn("Solitaire Mystery");
+		when(testBook.getTitle()).thenReturn("Optics");
 
 		when(book1.getAuthor()).thenReturn("Orson Scott Card");
 		when(book2.getAuthor()).thenReturn("Orson Scott Card");
 		when(book3.getAuthor()).thenReturn("Greg Bear");
 		when(book4.getAuthor()).thenReturn("Greg Bear");
 		when(book5.getAuthor()).thenReturn("Jostein Gaarder");
+		when(testBook.getAuthor()).thenReturn("Eugene Hect");
 
 		when(book1.getId()).thenReturn(0);
 		when(book2.getId()).thenReturn(1);
 		when(book3.getId()).thenReturn(2);
 		when(book4.getId()).thenReturn(3);
 		when(book5.getId()).thenReturn(4);
+		when(testBook.getId()).thenReturn(5);
 
-		Book[] bookList = {book1, book2, book3, book4, book5};
-
-		BookDAO.getInstance().add(bookList);
+		Book[] bookArr = {book1, book2, book3, book4, book5};
+		BookDAO.getInstance().add(bookArr);
 
 		when(member1.getId()).thenReturn(0);
 		when(member2.getId()).thenReturn(1);
 		when(member3.getId()).thenReturn(2);
 		when(member4.getId()).thenReturn(3);
+		when(testMember.getId()).thenReturn(4);
 
 		when(member1.getFirstName()).thenReturn("Valentine");
 		when(member2.getFirstName()).thenReturn("Peter");
 		when(member3.getFirstName()).thenReturn("Mitch");
 		when(member4.getFirstName()).thenReturn("Hans-Thomas");
+		when(testMember.getFirstName()).thenReturn("Primrose");
 
 		when(member1.getLastName()).thenReturn("Wiggin");
 		when(member2.getLastName()).thenReturn("Wiggin");
 		when(member3.getLastName()).thenReturn("Rafelson");
 		when(member4.getLastName()).thenReturn("Frode");
+		when(testMember.getLastName()).thenReturn("Everdeen");
 
 		when(member1.getEmailAddress()).thenReturn("demosthenes@newsnet.com");
 		when(member2.getEmailAddress()).thenReturn("locke@newsnet.com");
 		when(member3.getEmailAddress()).thenReturn("mitch@sheva.org");
 		when(member4.getEmailAddress()).thenReturn("goldfish@rainbowfizz.net");
+		when(testMember.getEmailAddress()).thenReturn("primrose@district13.org");
+
+		Member[] memberArr = {member1, member2, member3, member4};
+		MemberDAO.getInstance().add(memberArr);
 
 		when(loan1.getMember()).thenReturn(member1);
 		when(loan1.getBook()).thenReturn(book2);
@@ -137,12 +162,12 @@ public class DAOTest
 		when(loan2.getId()).thenReturn(1);
 		when(loan3.getId()).thenReturn(2);
 
-		Calendar cal = Calendar.getInstance();
-		Date now = cal.getTime();
+		when(loan1.checkOverDue(any(Date.class))).thenReturn(true);
+		when(loan2.checkOverDue(any(Date.class))).thenReturn(true);
+		when(loan3.checkOverDue(any(Date.class))).thenReturn(false);
 
-		when(loan1.checkOverDue(now)).thenReturn(true);
-		when(loan2.checkOverDue(now)).thenReturn(true);
-		when(loan3.checkOverDue(now)).thenReturn(false);
+		Loan[] loanArr = {loan1, loan2, loan3};
+		LoanDAO.getInstance().add(loanArr);
 	}
 
 	@Test
@@ -169,7 +194,10 @@ public class DAOTest
 	{
 		List<Loan> loanList = LoanDAO.getInstance().findLoansByBookTitle("Speaker For The Dead");
 		assertEquals(1, loanList.size());
-		assertEquals(member3, loanList.get(0).getMember());
+		assertEquals(member1, loanList.get(0).getMember());
+
+		loanList = LoanDAO.getInstance().findLoansByBookTitle("Optics");
+		assertEquals(0, loanList.size());
 	}
 
 	@Test
@@ -177,6 +205,9 @@ public class DAOTest
 	{
 		Loan loan = LoanDAO.getInstance().getLoanByBook(book4);
 		assertEquals(member3, loan.getMember());
+
+		loan = LoanDAO.getInstance().getLoanByBook(testBook);
+		assertEquals(null, loan);
 	}
 
 	@Test
@@ -196,6 +227,9 @@ public class DAOTest
 		{
 			assertEquals(true, false); // has to be both members, one or the other way around
 		}
+
+		loanList = LoanDAO.getInstance().findLoansByBorrower(testMember);
+		assertEquals(0, loanList.size());
 	}
 
 	@Test
@@ -204,6 +238,9 @@ public class DAOTest
 		Loan loan = LoanDAO.getInstance().getById(1);
 		assertEquals(member1, loan.getMember());
 		assertEquals(book3, loan.getBook());
+
+		loan = LoanDAO.getInstance().getById(3);
+		assertEquals(null, loan);
 	}
 
 	@Test
@@ -211,6 +248,9 @@ public class DAOTest
 	{
 		Member member = MemberDAO.getInstance().findMembersByNames("Hans-Thomas", "Frode");
 		assertEquals(3, member.getId());
+
+		member = MemberDAO.getInstance().findMembersByNames("Primrose", "Everdeen");
+		assertEquals(null, member);
 	}
 
 	@Test
@@ -219,6 +259,9 @@ public class DAOTest
 		List<Member> memberList = MemberDAO.getInstance().findMembersByEmailAddress("mitch@sheva.org");
 		assertEquals(1, memberList.size());
 		assertEquals("Mitch", memberList.get(0).getFirstName());
+
+		memberList = MemberDAO.getInstance().findMembersByEmailAddress("primrose@district13.org");
+		assertEquals(0, memberList.size());
 	}
 
 	@Test
@@ -238,13 +281,19 @@ public class DAOTest
 		{
 			assertEquals(true, false); // has to be both members, one or the other way around
 		}
+
+		memberList = MemberDAO.getInstance().findMembersByLastName("Everdeen");
+		assertEquals(0, memberList.size());
 	}
 
 	@Test
 	public void testSearchByMemberMemberDAO()
 	{
 		Member member = MemberDAO.getInstance().getById(2);
-		assertEquals("Frode", member.getLastName());
+		assertEquals("Rafelson", member.getLastName());
+
+		member = MemberDAO.getInstance().getById(7);
+		assertEquals(null, member);
 	}
 
 	@Test
@@ -252,6 +301,9 @@ public class DAOTest
 	{
 		Book book = BookDAO.getInstance().findBooksByAuthorTitle("Jostein Gaarder", "Solitaire Mystery");
 		assertEquals(4, book.getId());
+
+		book = BookDAO.getInstance().findBooksByAuthorTitle("Eugene Hecht", "Optics");
+		assertEquals(null, book);
 	}
 
 	@Test
@@ -260,6 +312,9 @@ public class DAOTest
 		Book book = BookDAO.getInstance().getById(4);
 		assertEquals("Jostein Gaarder", book.getAuthor());
 		assertEquals("Solitaire Mystery", book.getTitle());
+
+		book = BookDAO.getInstance().getById(5);
+		assertEquals(null, book);
 	}
 
 	@Test
@@ -268,6 +323,9 @@ public class DAOTest
 		List<Book> bookList = BookDAO.getInstance().findBooksByTitle("Ender's Game");
 		assertEquals(1, bookList.size());
 		assertEquals("Orson Scott Card", bookList.get(0).getAuthor());
+
+		bookList = BookDAO.getInstance().findBooksByTitle("Quantum Physics of Atoms, Molecules, Solids, Nuclei And Particles");
+		assertEquals(0, bookList.size());
 	}
 	@Test
 	public void testSearchByAuthorBookDAO()
@@ -286,5 +344,8 @@ public class DAOTest
 		{
 			assertEquals(true, false); // has to be both books, one or the other way around
 		}
+
+		bookList = BookDAO.getInstance().findBooksByAuthor("Robin Hobb");
+		assertEquals(0, bookList.size());
 	}
 }
