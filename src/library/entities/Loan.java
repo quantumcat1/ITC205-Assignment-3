@@ -13,7 +13,6 @@ public class Loan extends Entity
 	public static final int LOAN_PERIOD = 14;
 	private Member member;
 	private Book book;
-	private int id;
 	private Date borrowDate;
 	private static int counter = 0;
 
