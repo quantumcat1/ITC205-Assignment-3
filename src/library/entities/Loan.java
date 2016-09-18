@@ -1,5 +1,6 @@
 package library.entities;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -32,7 +33,10 @@ public class Loan extends Entity
 	@Override
 	public String toString()
 	{
-		return "Loan ID: " + String.valueOf(id) + "\nAuthor: " + book.getAuthor() + "\nTitle: " + book.getTitle() + "\nBorrower: " + member.fullName() + "\nBorrowed: " + borrowDate + "\nDue Date: " + dueDate();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		String formattedBorrowDate = sdf.format(borrowDate);
+		String formattedDueDate = sdf.format(dueDate());
+		return "Loan ID: " + String.valueOf(id) + "\nAuthor: " + book.getAuthor() + "\nTitle: " + book.getTitle() + "\nBorrower: " + member.fullName() + "\nBorrowed: " + formattedBorrowDate + "\nDue Date: " + formattedDueDate;
 	}
 
 	public boolean checkOverDue(Date currentDate)
