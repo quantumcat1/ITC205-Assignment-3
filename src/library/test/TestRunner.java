@@ -15,7 +15,7 @@ public class TestRunner
 		}
 		System.out.println("Entity unit testing success: " + result.wasSuccessful());
 
-		result = JUnitCore.runClasses(EntityTest.class);
+		result = JUnitCore.runClasses(DAOTest.class);
 		for(Failure failure : result.getFailures())
 		{
 			System.out.println(failure.toString());
