@@ -23,7 +23,7 @@ public class Member extends Entity
 		this.emailAddress = emailAddress;
 	}
 
-	public void resetCounter()
+	public static void resetCounter()
 	{
 		counter = 0;
 	}

@@ -24,7 +24,7 @@ public class Loan extends Entity
 		this.borrowDate = borrowDate;
 	}
 
-	public void resetCounter()
+	public static void resetCounter()
 	{
 		counter = 0;
 	}
