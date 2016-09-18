@@ -123,7 +123,7 @@ public class CTLIntegrationTest
 
 		ctl.setLoanList(loanList);
 		ctl.loansConfirmed(true);
-		assertEquals(EBorrowState.INITIALIZED, ((BorrowUC_UI) (ctl.getUi())).getState());
+		assertEquals(EBorrowState.CREATED, ((BorrowUC_UI) (ctl.getUi())).getState());
 	}
 	@Test
 	public void loansRejected()
