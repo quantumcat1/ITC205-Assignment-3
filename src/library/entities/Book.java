@@ -20,6 +20,12 @@ public class Book extends Entity
 		this.callNumber = callNumber;
 		this.state = EBookState.ACCEPTABLE; //assuming if we've just added a book to the library it will be new?
 	}
+
+	public void resetCounter()
+	{
+		counter = 0;
+	}
+
 	@Override
 	public String toString()
 	{

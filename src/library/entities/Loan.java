@@ -24,6 +24,11 @@ public class Loan extends Entity
 		this.borrowDate = borrowDate;
 	}
 
+	public void resetCounter()
+	{
+		counter = 0;
+	}
+
 	@Override
 	public String toString()
 	{
@@ -42,10 +47,10 @@ public class Loan extends Entity
 
 	public Date dueDate()
 	{
-		Calendar c = Calendar.getInstance();
-		c.setTime(borrowDate);
-		c.add(Calendar.DATE, LOAN_PERIOD);
-		return c.getTime();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(borrowDate);
+		cal.add(Calendar.DATE, LOAN_PERIOD);
+		return cal.getTime();
 	}
 
 	public Member getMember()

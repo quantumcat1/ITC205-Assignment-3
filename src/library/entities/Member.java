@@ -23,6 +23,11 @@ public class Member extends Entity
 		this.emailAddress = emailAddress;
 	}
 
+	public void resetCounter()
+	{
+		counter = 0;
+	}
+
 	public String fullName()
 	{
 		return firstName + " " + lastName;
