@@ -1,7 +1,6 @@
 package library.test;
 
 import org.junit.Test;
-import org.mockito.Mock;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -48,23 +47,43 @@ public class DAOTest
 	 *
 	 */
 
-	Book book1 = mock(Book.class);
-	Book book2 = mock(Book.class);
-	Book book3 = mock(Book.class);
-	Book book4 = mock(Book.class);
-	Book book5 = mock(Book.class);
+	Book book1;
+	Book book2;
+	Book book3;
+	Book book4;
+	Book book5;
 
-	Member member1 = mock(Member.class);
-	Member member2 = mock(Member.class);
-	Member member3 = mock(Member.class);
-	Member member4 = mock(Member.class);
+	Member member1;
+	Member member2;
+	Member member3;
+	Member member4;
 
-	Loan loan1 = mock(Loan.class);
-	Loan loan2 = mock(Loan.class);
-	Loan loan3 = mock(Loan.class);
+	Loan loan1;
+	Loan loan2;
+	Loan loan3;
 
 	public DAOTest()
 	{
+		initialise();
+	}
+
+	public void initialise()
+	{
+		book1 = mock(Book.class);
+		book2 = mock(Book.class);
+		book3 = mock(Book.class);
+		book4 = mock(Book.class);
+		book5 = mock(Book.class);
+
+		member1 = mock(Member.class);
+		member2 = mock(Member.class);
+		member3 = mock(Member.class);
+		member4 = mock(Member.class);
+
+		loan1 = mock(Loan.class);
+		loan2 = mock(Loan.class);
+		loan3 = mock(Loan.class);
+
 		when(book1.getTitle()).thenReturn("Ender's Game");
 		when(book2.getTitle()).thenReturn("Speaker For The Dead");
 		when(book3.getTitle()).thenReturn("Darwin's Radio");

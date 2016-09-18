@@ -14,11 +14,19 @@ public class TestRunner
 			System.out.println(failure.toString());
 		}
 		System.out.println("Entity unit testing success: " + result.wasSuccessful());
+
 		result = JUnitCore.runClasses(EntityTest.class);
 		for(Failure failure : result.getFailures())
 		{
 			System.out.println(failure.toString());
 		}
 		System.out.println("DAO unit testing success: " + result.wasSuccessful());
+
+		result = JUnitCore.runClasses(EntityDAOIntegrationTest.class);
+		for(Failure failure : result.getFailures())
+		{
+			System.out.println(failure.toString());
+		}
+		System.out.println("Entity DAO integration testing success: " + result.wasSuccessful());
 	}
 }

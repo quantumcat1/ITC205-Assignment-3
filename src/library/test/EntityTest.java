@@ -54,6 +54,11 @@ public class EntityTest
 
 	public EntityTest()
 	{
+		//ensure ids will start with zero
+		Book.resetCounter();
+		Loan.resetCounter();
+		Member.resetCounter();
+
 		Calendar cal = Calendar.getInstance();
 		now = cal.getTime();
 
