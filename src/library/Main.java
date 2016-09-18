@@ -67,7 +67,6 @@ public class Main implements IMainListener
 	            public void run()
 	            {
 	            	ctl.initialise();
-	            	//reader.setEnabled(true);
 	            	setEnabled(true, false, false, true);
 	            }
 	        }
@@ -75,37 +74,38 @@ public class Main implements IMainListener
 	}
 
 
-	private void setupTestData()
+	public static void setupTestData()
 	{
-        Book[] book = new Book[15];
-		Member[] member = new Member[6];
+        Book[] bookArr = {new Book("author1", "title1", "callNo1"),
+		        		new Book("author1", "title2", "callNo2"),
+		        		new Book("author1", "title3", "callNo3"),
+		        		new Book("author1", "title4", "callNo4"),
+		        		new Book("author2", "title5", "callNo5"),
+		        		new Book("author2", "title6", "callNo6"),
+		        		new Book("author2", "title7", "callNo7"),
+		        		new Book("author2", "title8", "callNo8"),
+		        		new Book("author3", "title9", "callNo9"),
+		        		new Book("author3", "title10", "callNo10"),
+		        		new Book("author4", "title11", "callNo11"),
+		        		new Book("author4", "title12", "callNo12"),
+		        		new Book("author5", "title13", "callNo13"),
+		        		new Book("author5", "title14", "callNo14"),
+		        		new Book("author5", "title15", "callNo15")};
 
-		book[0]  = BookDAO.getInstance().add(new Book("author1", "title1", "callNo1"));
-		book[1]  = BookDAO.getInstance().add(new Book("author1", "title2", "callNo2"));
-		book[2]  = BookDAO.getInstance().add(new Book("author1", "title3", "callNo3"));
-		book[3]  = BookDAO.getInstance().add(new Book("author1", "title4", "callNo4"));
-		book[4]  = BookDAO.getInstance().add(new Book("author2", "title5", "callNo5"));
-		book[5]  = BookDAO.getInstance().add(new Book("author2", "title6", "callNo6"));
-		book[6]  = BookDAO.getInstance().add(new Book("author2", "title7", "callNo7"));
-		book[7]  = BookDAO.getInstance().add(new Book("author2", "title8", "callNo8"));
-		book[8]  = BookDAO.getInstance().add(new Book("author3", "title9", "callNo9"));
-		book[9]  = BookDAO.getInstance().add(new Book("author3", "title10", "callNo10"));
-		book[10] = BookDAO.getInstance().add(new Book("author4", "title11", "callNo11"));
-		book[11] = BookDAO.getInstance().add(new Book("author4", "title12", "callNo12"));
-		book[12] = BookDAO.getInstance().add(new Book("author5", "title13", "callNo13"));
-		book[13] = BookDAO.getInstance().add(new Book("author5", "title14", "callNo14"));
-		book[14] = BookDAO.getInstance().add(new Book("author5", "title15", "callNo15"));
+        BookDAO.getInstance().add(bookArr);
 
-		member[0] = MemberDAO.getInstance().add(new Member("fName0", "lName0", "0001", "email0"));
-		member[1] = MemberDAO.getInstance().add(new Member("fName1", "lName1", "0002", "email1"));
-		member[2] = MemberDAO.getInstance().add(new Member("fName2", "lName2", "0003", "email2"));
-		member[3] = MemberDAO.getInstance().add(new Member("fName3", "lName3", "0004", "email3"));
-		member[4] = MemberDAO.getInstance().add(new Member("fName4", "lName4", "0005", "email4"));
-		member[5] = MemberDAO.getInstance().add(new Member("fName5", "lName5", "0006", "email5"));
+		Member[] memberArr = {new Member("fName0", "lName0", "0001", "email0"),
+							new Member("fName1", "lName1", "0002", "email1"),
+							new Member("fName2", "lName2", "0003", "email2"),
+							new Member("fName3", "lName3", "0004", "email3"),
+							new Member("fName4", "lName4", "0005", "email4"),
+							new Member("fName5", "lName5", "0006", "email5")};
+
+		MemberDAO.getInstance().add(memberArr);
 
 		Calendar cal = Calendar.getInstance(); //defaults to now
 		Date now = cal.getTime();
-		//make the borrowDate be so long ago that the books are now due:
+		//make the borrowDate be so long ago that the books are now due (loan period + 1 days ago):
 		cal.add(Calendar.DATE, -1*(Loan.LOAN_PERIOD + 1));
 		Date nowOverDue = cal.getTime();
 
@@ -113,25 +113,26 @@ public class Main implements IMainListener
 		//create a member with overdue loans
 		for (int i=0; i<2; i++)
 		{
-			Loan loan =  LoanDAO.getInstance().add(new Loan(member[1], book[i], nowOverDue));
+			LoanDAO.getInstance().add(new Loan(memberArr[1], bookArr[i], nowOverDue));
 		}
 
 		//create a member with maxed out unpaid fines
-		member[2].addFine(Member.MAX_FINE + 1);
+		memberArr[2].addFine(Member.MAX_FINE + 1);
 
 		//create a member with maxed out loans
 		//TODO: make sure too many loans can't be added.
 		for (int i=2; i<7; i++)
 		{
-			Loan loan = LoanDAO.getInstance().add(new Loan(member[3], book[i], now));
+			LoanDAO.getInstance().add(new Loan(memberArr[3], bookArr[i], now));
 		}
 
 		//a member with a fine, but not over the limit
-		member[4].addFine(50);
+		memberArr[4].addFine(50);
 
 		//a member with a couple of loans but not over the limit
-		for (int i=7; i<9; i++) {
-			Loan loan = LoanDAO.getInstance().add(new Loan(member[5], book[i], now));
+		for (int i=7; i<9; i++)
+		{
+			LoanDAO.getInstance().add(new Loan(memberArr[5], bookArr[i], now));
 		}
 	}
 
@@ -145,7 +146,7 @@ public class Main implements IMainListener
         {
             public void run()
             {
-            	main.display.setDisplay(new MainPanel(main), "Main Menu");
+            	Main.display.setDisplay(new MainPanel(main), "Main Menu");
             	//main.display.setDisplay(MainPanel.getInstance(main), "Main Menu");
                 main.showGUI();
             }

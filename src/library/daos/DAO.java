@@ -11,14 +11,13 @@ public class DAO <X extends Entity>
 	protected HashMap<Integer, X> database = new HashMap<Integer, X>();
 
 
-	public X add(X x)
+	public void add(X x)
 	{
 		X testX = database.get(x.getId());
-		if(testX == null)
+		if(testX == null) //don't add more than one of the same thing
 		{
 			database.put(x.getId(), x);
 		}
-		return x;
 	}
 
 	public void add(List<X> list)
@@ -51,5 +50,4 @@ public class DAO <X extends Entity>
 	{
 		database.clear();
 	}
-
 }
