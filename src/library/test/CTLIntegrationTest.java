@@ -12,6 +12,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;*/
 
 import library.BorrowUC_CTL;
+import library.BorrowUC_CTL.BorrowUC_UI;
 import library.Main;
 import library.daos.BookDAO;
 import library.daos.LoanDAO;
@@ -83,7 +84,7 @@ public class CTLIntegrationTest
 		assertEquals(MemberDAO.getInstance().getById(2), ctl.getBorrower());
 
 		//member with id 2 has maxed out fines
-		//assertEquals(EBorrowState.BORROWING_RESTRICTED, ctl.getUi().getState());
+		assertEquals(EBorrowState.BORROWING_RESTRICTED, ((BorrowUC_UI) (ctl.getUi())).getState());
 	}
 
 	@Test
@@ -91,6 +92,9 @@ public class CTLIntegrationTest
 	{
 		//no books yet scanned, make sure bookList has nothing in it
 		assertEquals(0, ctl.getBookList().size());
+
+		ctl.setBorrower(MemberDAO.getInstance().getById(3));
+		//otherwise it isn't happy when it tries to make a loan with a null borrower.
 
 		//scan a book that is on loan to make sure it doesn't get added
 		ctl.bookScanned(2);
