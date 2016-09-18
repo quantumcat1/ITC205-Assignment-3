@@ -1,17 +1,19 @@
 package library.entities;
 
+import java.util.List;
+
+import library.daos.LoanDAO;
 import library.enums.EMemberState;
 
 public class Member extends Entity
 {
 	public static final float MAX_FINE = 100;
-	public static final int MAX_LOANS = 4;
+	public static final int MAX_LOANS = 5;
 	private String firstName;
 	private String lastName;
 	private float fineAmount;
 	private String phoneNumber;
 	private String emailAddress;
-	private EMemberState state;
 	private static int counter = 0;
 
 	public Member (String firstName, String lastName, String phoneNumber, String emailAddress)
@@ -26,6 +28,24 @@ public class Member extends Entity
 	public static void resetCounter()
 	{
 		counter = 0;
+	}
+
+	public static EMemberState checkRestricted(Member member)
+	{
+		//check whether too many fines (do this one first - quickest)
+		if(member.getFineAmount() >= MAX_FINE)
+		{
+			return EMemberState.RESTRICTED_FINES;
+		}
+		/*check whether too many loans (not an else because we don't
+		 * want to be getting a list if we don't have to)
+		 */
+		List<Loan> loanList = LoanDAO.getInstance().findLoansByBorrower(member);
+		if(loanList.size() >= MAX_LOANS)
+		{
+			return EMemberState.RESTRICTED_LOANS;
+		}
+		return EMemberState.NOT_RESTRICTED;
 	}
 
 	public String fullName()
@@ -72,11 +92,6 @@ public class Member extends Entity
 		return true;
 	}
 
-	public EMemberState getState()
-	{
-		return state;
-	}
-
 	public String getFirstName()
 	{
 		return firstName;
@@ -92,7 +107,7 @@ public class Member extends Entity
 		return phoneNumber;
 	}
 
-	public String  getEmailAddress()
+	public String getEmailAddress()
 	{
 		return emailAddress;
 	}

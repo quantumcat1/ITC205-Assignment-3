@@ -67,5 +67,6 @@ public class SwipeCardPanel extends ABorrowPanel
 	public void displayMemberDetails(int memberID, String memberName, String memberPhone)
 	{
 		lblSwipeCard.setText("test");
+		//when would this be called?
 	}
 }

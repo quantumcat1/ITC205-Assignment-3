@@ -1,6 +1,5 @@
 package library.panels.borrow;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import library.enums.EBorrowState;

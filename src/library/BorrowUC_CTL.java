@@ -17,6 +17,7 @@ import library.entities.Loan;
 import library.entities.Member;
 import library.enums.EBookState;
 import library.enums.EBorrowState;
+import library.enums.EMemberState;
 import library.interfaces.hardware.ICardReader;
 import library.interfaces.hardware.ICardReaderListener;
 import library.interfaces.hardware.IDisplay;
@@ -67,16 +68,34 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		Member member = MemberDAO.getInstance().getById(memberId);
 		if(member == null)
 		{
-			//TODO: show error message, member not registered with library
+			ui.displayErrorMessage("Member ID " + memberId + " not found");
 		}
-		else //TODO: also need to check they aren't restricted
+		else
 		{
-			ui.setState(EBorrowState.SCANNING_BOOKS);
+			//will do this whether restricted or not:
 			borrower = member;
+			Main.setEnabled(false, true, false, true); //only main borrow panel and book scanner enabled
+			EMemberState state = Member.checkRestricted(member);
+			if(state != EMemberState.NOT_RESTRICTED)
+			{
+				ui.setState(EBorrowState.BORROWING_RESTRICTED);
+				if(state == EMemberState.RESTRICTED_FINES)
+				{
+					ui.displayOverFineLimitMessage(member.getFineAmount());
+				}
+				else if (state == EMemberState.RESTRICTED_LOANS)
+				{
+					ui.displayAtLoanLimitMessage();
+				}
+				ui.displayErrorMessage("Member " + memberId + " cannot borrow at this time.");
+			}
+			else
+			{
+				ui.setState(EBorrowState.SCANNING_BOOKS);
+			}
 			ui.displayMemberDetails(borrower.getId(), borrower.fullName(), borrower.getPhoneNumber());
 			List<Loan> loans = LoanDAO.getInstance().findLoansByBorrower(borrower);
 			ui.displayExistingLoan(buildLoanListDisplay(loans));
-			Main.setEnabled(false, true, false, true); //only main borrow panel and book scanner enabled
 		}
 	}
 

@@ -24,6 +24,22 @@ public class LoanDAO extends DAO <Loan>
 		return instance;
 	}
 
+	@Override
+	public boolean add(Loan loan)
+	{
+		List<Loan> loanList = findLoansByBorrower(loan.getMember());
+		if(loanList.size() == Member.MAX_LOANS)
+		{
+			return false; //too many loans, can't add any more
+		}
+		else if(loanList.size() > Member.MAX_LOANS)
+		{
+			//TODO: exception here? Check docs to see if there is one in mind
+			return false;
+		}
+		return super.add(loan);
+	}
+
 
 	public Loan getLoanByBook(Book book)
 	{

@@ -1,7 +1,6 @@
 package library.enums;
 
-public enum ELoanState {
-	
+public enum ELoanState
+{
 	PENDING, CURRENT, OVERDUE, COMPLETE
-
 }

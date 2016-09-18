@@ -1,7 +1,6 @@
 package library.enums;
 
-public enum EMemberState { 
-	
-	BORROWING_ALLOWED, BORROWING_DISALLOWED 
-
-}	
+public enum EMemberState
+{
+	NOT_RESTRICTED, RESTRICTED_FINES, RESTRICTED_LOANS
+}

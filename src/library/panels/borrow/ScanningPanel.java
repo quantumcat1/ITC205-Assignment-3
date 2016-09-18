@@ -185,9 +185,9 @@ public class ScanningPanel extends ABorrowPanel
 
 
 	@Override
-	public void displayMemberDetails(int memberID, String memberName, String memberPhone)
+	public void displayMemberDetails(int memberId, String memberName, String memberPhone)
 	{
-		lblBorrowerId.setText(Integer.valueOf(memberID).toString());
+		lblBorrowerId.setText(Integer.valueOf(memberId).toString());
 		lblBorrowerName.setText(memberName);
 		lblBorrowerContact.setText(memberPhone);
 	}

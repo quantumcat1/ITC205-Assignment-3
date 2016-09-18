@@ -74,7 +74,8 @@ public class ConfirmLoanPanel extends ABorrowPanel {
 
 
 	@Override
-	public void displayConfirmingLoan(String loanDetails) {
+	public void displayConfirmingLoan(String loanDetails)
+	{
 		loanListTA.setText(loanDetails);
 		loanListTA.setCaretPosition(0);
 	}

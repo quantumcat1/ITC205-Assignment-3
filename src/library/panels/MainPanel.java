@@ -1,9 +1,7 @@
 package library.panels;
 
-import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import library.Main;
 import library.interfaces.IMainListener;
 import library.panels.borrow.ABorrowPanel;
 

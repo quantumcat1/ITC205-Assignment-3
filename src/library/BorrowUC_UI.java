@@ -86,7 +86,7 @@ public class BorrowUC_UI extends JPanel implements IBorrowUI
 	public void displayMemberDetails(int memberID, String memberName, String memberPhone)
 	{
 		IBorrowUI ui = panels.get(state);
-		ui.displayMemberDetails( memberID,  memberName, memberPhone);
+		ui.displayMemberDetails(memberID,  memberName, memberPhone);
 	}
 
 
