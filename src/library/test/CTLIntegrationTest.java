@@ -3,6 +3,10 @@ package library.test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.Test;
 /*import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
@@ -40,7 +44,6 @@ public class CTLIntegrationTest
 
 	 * -cardSwiped
 	 * -bookScanned
-	 * -cancelled
 	 * -scansCompleted
 	 * -loansConfirmed
 	 * -loansRejected
@@ -103,5 +106,36 @@ public class CTLIntegrationTest
 		ctl.bookScanned(14);
 		//make sure bookList now has one thing in it
 		assertEquals(1, ctl.getBookList().size());
+	}
+
+	@Test
+	public void testScansCompleted()
+	{
+		ctl.scansCompleted(true);
+		assertEquals(EBorrowState.CONFIRMING_LOANS, ((BorrowUC_UI) (ctl.getUi())).getState());
+	}
+	@Test
+	public void testLoansConfirmed()
+	{
+		//make sure there is a loan so we can test properly
+		List<Loan> loanList = new LinkedList<Loan>();
+		loanList.add(new Loan(MemberDAO.getInstance().getById(0), BookDAO.getInstance().getById(13), Calendar.getInstance().getTime()));
+
+		ctl.setLoanList(loanList);
+		ctl.loansConfirmed(true);
+		assertEquals(EBorrowState.INITIALIZED, ((BorrowUC_UI) (ctl.getUi())).getState());
+	}
+	@Test
+	public void loansRejected()
+	{
+		//make sure there is a loan so we can test properly
+		List<Loan> loanList = new LinkedList<Loan>();
+		loanList.add(new Loan(MemberDAO.getInstance().getById(0), BookDAO.getInstance().getById(13), Calendar.getInstance().getTime()));
+
+		ctl.setLoanList(loanList);
+
+		ctl.loansRejected(true);
+		assertEquals(EBorrowState.SCANNING_BOOKS, ((BorrowUC_UI) (ctl.getUi())).getState());
+		assertEquals(0, ctl.getLoanList().size());
 	}
 }
