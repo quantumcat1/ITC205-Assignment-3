@@ -59,7 +59,8 @@ public class Main implements IMainListener
 	{
 		//BorrowUC_CTL ctl = new BorrowUC_CTL(reader, scanner, printer, display);
 				// null, null, null);
-		ctl = new BorrowUC_CTL(reader, scanner, printer, display);
+		//ctl = new BorrowUC_CTL(reader, scanner, printer, display);
+		ctl = new BorrowUC_CTL(display);
         javax.swing.SwingUtilities.invokeLater
         (
 	        new Runnable()
@@ -113,7 +114,8 @@ public class Main implements IMainListener
 		//create a member with overdue loans
 		for (int i=0; i<2; i++)
 		{
-			LoanDAO.getInstance().add(new Loan(memberArr[1], bookArr[i], nowOverDue));
+			Loan loan = new Loan(memberArr[1], bookArr[i], nowOverDue);
+			LoanDAO.getInstance().add(loan);
 		}
 
 		//create a member with maxed out unpaid fines
@@ -123,7 +125,8 @@ public class Main implements IMainListener
 		//TODO: make sure too many loans can't be added.
 		for (int i=2; i<7; i++)
 		{
-			LoanDAO.getInstance().add(new Loan(memberArr[3], bookArr[i], now));
+			Loan loan = new Loan(memberArr[3], bookArr[i], now);
+			LoanDAO.getInstance().add(loan);
 		}
 
 		//a member with a fine, but not over the limit

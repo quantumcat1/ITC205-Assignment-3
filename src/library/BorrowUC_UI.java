@@ -1,4 +1,4 @@
-package library;
+/*package library;
 
 import java.awt.CardLayout;
 import javax.swing.JPanel;
@@ -83,10 +83,10 @@ public class BorrowUC_UI extends JPanel implements IBorrowUI
 
 
 	@Override
-	public void displayMemberDetails(int memberID, String memberName, String memberPhone)
+	public void displayMemberDetails(int memberId, String memberName, String memberPhone)
 	{
 		IBorrowUI ui = panels.get(state);
-		ui.displayMemberDetails(memberID,  memberName, memberPhone);
+		ui.displayMemberDetails(memberId,  memberName, memberPhone);
 	}
 
 
@@ -160,3 +160,4 @@ public class BorrowUC_UI extends JPanel implements IBorrowUI
 
 
 }
+*/
