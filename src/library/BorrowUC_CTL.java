@@ -1,6 +1,5 @@
 package library;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -24,47 +23,30 @@ import library.interfaces.hardware.IDisplay;
 import library.interfaces.hardware.IPrinter;
 import library.interfaces.hardware.IScanner;
 import library.interfaces.hardware.IScannerListener;
-import library.panels.borrow.ABorrowPanel;
-import library.panels.borrow.ScanningPanel;
-import library.panels.borrow.SwipeCardPanel;
 
 public class BorrowUC_CTL implements ICardReaderListener,
 									 IScannerListener,
 									 IBorrowUIListener
 {
-	private ICardReader reader;
-	private IScanner scanner;
-	private IPrinter printer;
 	private IDisplay display;
-	//private String state;
-	private int scanCount = 0;
 	private IBorrowUI ui;
-	private EBorrowState state;
 
-	//not needed, using singletons:
-	//private BookDAO bookDAO;
-	//private MemberDAO memberDAO;
-	//private LoanDAO loanDAO;
-
-	//temporary ones until they are confirmed and sent to the daos (I think):
-	private List<Book> bookList; //books scanned awaiting confirmation of loan?
-	private List<Loan> loanList; //to show pending loans
-	private Member borrower; //borrower whose card we scanned?
+	//lists for temporary data until confirmed:
+	private List<Book> bookList; //books scanned
+	private List<Loan> loanList; //pending loans awaiting confirmation
+	private Member borrower; //borrower whose card was scanned
 
 	private JPanel previous;
 
 
 	public BorrowUC_CTL(ICardReader reader, IScanner scanner,
 			IPrinter printer, IDisplay display)
-			//not needed, using singletons:
-			//BookDAO bookDAO, LoanDAO loanDAO, MemberDAO memberDAO)
 	{
 		bookList = new LinkedList<Book>();
 		loanList = new LinkedList<Loan>();
 
 		this.display = display;
 		this.ui = new BorrowUC_UI(this);
-		state = EBorrowState.CREATED;
 	}
 
 	public void initialise()
@@ -87,11 +69,11 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		{
 			//TODO: show error message, member not registered with library
 		}
-		else
+		else //TODO: also need to check they aren't restricted
 		{
 			ui.setState(EBorrowState.SCANNING_BOOKS);
 			borrower = member;
-			ui.displayMemberDetails(memberId, "fred", "857");
+			ui.displayMemberDetails(borrower.getId(), borrower.fullName(), borrower.getPhoneNumber());
 			List<Loan> loans = LoanDAO.getInstance().findLoansByBorrower(borrower);
 			ui.displayExistingLoan(buildLoanListDisplay(loans));
 			Main.setEnabled(false, true, false, true); //only main borrow panel and book scanner enabled
@@ -129,12 +111,6 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		}
 	}
 
-
-	private void setState(EBorrowState state)
-	{
-		throw new RuntimeException("Not implemented yet");
-	}
-
 	@Override
 	public void cancelled()
 	{
@@ -152,14 +128,20 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	@Override
 	public void loansConfirmed()
 	{
-		//TODO: also change borrow panel state
+		//TODO: also change borrow panel state: goes back to beginning, and printer displays the completed loan
+		ui.setState(EBorrowState.INITIALIZED);
 		LoanDAO.getInstance().add(loanList);
+		Main.setEnabled(false, false, false, true); //only main borrow panel enabled
 	}
 
 	@Override
 	public void loansRejected()
 	{
-		throw new RuntimeException("Not implemented yet");
+		ui.setState(EBorrowState.SCANNING_BOOKS);
+		loanList.clear();
+		ui.displayPendingLoan("");
+		ui.displayScannedBookDetails("");
+		Main.setEnabled(false, true, false, true); //main borrow panel and scan books panel enabled
 	}
 
 	private String buildLoanListDisplay(List<Loan> loans)
