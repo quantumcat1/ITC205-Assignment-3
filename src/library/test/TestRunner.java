@@ -28,5 +28,12 @@ public class TestRunner
 			System.out.println(failure.toString());
 		}
 		System.out.println("Entity DAO integration testing success: " + result.wasSuccessful());
+
+		result = JUnitCore.runClasses(CTLIntegrationTest.class);
+		for(Failure failure : result.getFailures())
+		{
+			System.out.println(failure.toString());
+		}
+		System.out.println("CTL integration testing success: " + result.wasSuccessful());
 	}
 }

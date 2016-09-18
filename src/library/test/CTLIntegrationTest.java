@@ -1,13 +1,103 @@
 package library.test;
 
-//import library.BorrowUC_UI;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
+import org.junit.Test;
+/*import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.mockito.BDDMockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;*/
+
+import library.BorrowUC_CTL;
+import library.Main;
+import library.daos.BookDAO;
+import library.daos.LoanDAO;
+import library.daos.MemberDAO;
+import library.entities.Book;
+import library.entities.Loan;
+import library.entities.Member;
+import library.enums.EBorrowState;
+import library.hardware.Display;
+import library.panels.borrow.*;
+
+//@RunWith(PowerMockRunner.class)
+//@PrepareForTest({Main.class})
 public class CTLIntegrationTest
 {
-	//BorrowUC_UI ctl;
+	BorrowUC_CTL ctl;
+	Display display;
+	ScanningPanel scanningPanel;
+	SwipeCardPanel swipeCardPanel;
+	ConfirmLoanPanel confirmLoanPanel;
+	RestrictedPanel restrictedPanel;
+
+	/*
+	 * To test:
+
+	 * -cardSwiped
+	 * -bookScanned
+	 * -cancelled
+	 * -scansCompleted
+	 * -loansConfirmed
+	 * -loansRejected
+	 * -buildLoanListDisplay
+	 *
+	 */
 
 	public CTLIntegrationTest()
 	{
+		//ensure ids will start with zero
+		Book.resetCounter();
+		Loan.resetCounter();
+		Member.resetCounter();
+
+		//clear any data from previous tests
+		BookDAO.getInstance().clear();
+		MemberDAO.getInstance().clear();
+		LoanDAO.getInstance().clear();
+
+		Main.setupTestData();
+
+		//PowerMockito.mockStatic(Main.class);
+
+		display = mock(Display.class);
+		scanningPanel = mock(ScanningPanel.class);
+		confirmLoanPanel = mock(ConfirmLoanPanel.class);
+		restrictedPanel = mock(RestrictedPanel.class);
+		swipeCardPanel = mock(SwipeCardPanel.class);
+
+		//when(Main.setEnabled(any(boolean.class), any(boolean.class), any(boolean.class),any(boolean.class))).thenReturn(true);
+
+		ctl = new BorrowUC_CTL(display);
 	}
 
+	@Test
+	public void testCardSwiped()
+	{
+		ctl.cardSwiped(2, true);
+
+		//borrower has been set to the id entered:
+		assertEquals(MemberDAO.getInstance().getById(2), ctl.getBorrower());
+
+		//member with id 2 has maxed out fines
+		//assertEquals(EBorrowState.BORROWING_RESTRICTED, ctl.getUi().getState());
+	}
+
+	@Test
+	public void testBookScanned()
+	{
+		//no books yet scanned, make sure bookList has nothing in it
+		assertEquals(0, ctl.getBookList().size());
+
+		//scan a book that is on loan to make sure it doesn't get added
+		ctl.bookScanned(2);
+		assertEquals(0, ctl.getBookList().size());
+
+		ctl.bookScanned(14);
+		//make sure bookList now has one thing in it
+		assertEquals(1, ctl.getBookList().size());
+	}
 }

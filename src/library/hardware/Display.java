@@ -44,6 +44,4 @@ public class Display extends JFrame implements IDisplay
 		}
 		current = panel;
 	}
-
-
 }

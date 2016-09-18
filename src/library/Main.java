@@ -36,12 +36,14 @@ public class Main implements IMainListener
 		setupTestData();
 	}
 
-	public static void setEnabled (boolean bReader, boolean bScanner, boolean bPrinter, boolean bDisplay)
+	//public static void setEnabled (boolean bReader, boolean bScanner, boolean bPrinter, boolean bDisplay)
+	public static boolean setEnabled (boolean bReader, boolean bScanner, boolean bPrinter, boolean bDisplay)
 	{
 		reader.setEnabled(bReader);
 		scanner.setEnabled(bScanner);
 		printer.setEnabled(bPrinter);
 		display.setEnabled(bDisplay);
+		return true;
 	}
 
 
@@ -119,7 +121,7 @@ public class Main implements IMainListener
 		}
 
 		//create a member with maxed out unpaid fines
-		memberArr[2].addFine(Member.MAX_FINE + 1);
+		memberArr[2].addFine(Member.MAX_FINE);
 
 		//create a member with maxed out loans
 		//TODO: make sure too many loans can't be added.
