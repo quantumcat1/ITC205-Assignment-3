@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import library.interfaces.IBorrowUI;
 import library.interfaces.IBorrowUIListener;
+import library.interfaces.IMainListener;
 import library.daos.BookDAO;
 import library.daos.LoanDAO;
 import library.daos.MemberDAO;
@@ -27,6 +28,7 @@ import library.interfaces.hardware.IDisplay;
 import library.interfaces.hardware.IPrinter;
 import library.interfaces.hardware.IScanner;
 import library.interfaces.hardware.IScannerListener;
+import library.panels.MainPanel;
 import library.panels.borrow.ABorrowPanel;
 import library.panels.borrow.ConfirmLoanPanel;
 import library.panels.borrow.RestrictedPanel;
@@ -185,6 +187,8 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	@Override
 	public void cancelled()
 	{
+		ui.setState(EBorrowState.CREATED);
+		Main.setEnabled(false, false, false, true);
 		close();
 	}
 
@@ -210,9 +214,9 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	}
 	public void loansConfirmed(boolean bTest)
 	{
-		//TODO: also change borrow panel state: goes back to beginning, and printer displays the completed loan
 		ui.setState(EBorrowState.CREATED);
 		LoanDAO.getInstance().add(loanList);
+		Main.getPrinter().print(buildLoanListDisplay(loanList));
 		if(!bTest) //static methods kill integration testing
 		{
 			Main.setEnabled(false, false, false, true); //only main borrow panel enabled
@@ -267,11 +271,13 @@ public class BorrowUC_CTL implements ICardReaderListener,
 			this.panels = new HashMap<EBorrowState,IBorrowUI>();
 			this.setLayout(new CardLayout());
 			this.state = EBorrowState.INITIALIZED;
+			IMainListener mainListener;
 
 			addPanel(new SwipeCardPanel(listener),   EBorrowState.INITIALIZED);
 			addPanel(new ScanningPanel(listener),    EBorrowState.SCANNING_BOOKS);
 			addPanel(new RestrictedPanel(listener),  EBorrowState.BORROWING_RESTRICTED);
 			addPanel(new ConfirmLoanPanel(listener), EBorrowState.CONFIRMING_LOANS);
+			addPanel(new MainPanel(Main.main), 		 EBorrowState.CREATED);
 			//addPanel(new CancelledPanel(),           EBorrowState.CANCELLED);
 			//addPanel(new CompletedPanel(),           EBorrowState.COMPLETED);
 		}

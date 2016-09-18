@@ -25,12 +25,13 @@ public class Main implements IMainListener
 	private static Printer printer;
 	private static Display display;
 	public static BorrowUC_CTL ctl;
+	public static Main main;
 
 	public Main()
 	{
 		reader = new CardReader();
 		scanner = new Scanner();
-		printer = new Printer();
+		setPrinter(new Printer());
 		display = new Display();
 
 		setupTestData();
@@ -41,7 +42,7 @@ public class Main implements IMainListener
 	{
 		reader.setEnabled(bReader);
 		scanner.setEnabled(bScanner);
-		printer.setEnabled(bPrinter);
+		getPrinter().setEnabled(bPrinter);
 		display.setEnabled(bDisplay);
 		return true;
 	}
@@ -51,7 +52,7 @@ public class Main implements IMainListener
 	{
 		reader.setVisible(true);
 		scanner.setVisible(true);
-		printer.setVisible(true);
+		getPrinter().setVisible(true);
 		display.setVisible(true);
 	}
 
@@ -132,7 +133,7 @@ public class Main implements IMainListener
 		}
 
 		//a member with a fine, but not over the limit
-		memberArr[4].addFine(50);
+		memberArr[4].addFine(Member.MAX_FINE/2);
 
 		//a member with a couple of loans but not over the limit
 		for (int i=7; i<9; i++)
@@ -146,7 +147,7 @@ public class Main implements IMainListener
 	{
 
         // start the GUI
-		Main main = new Main();
+		main = new Main();
         javax.swing.SwingUtilities.invokeLater(new Runnable()
         {
             public void run()
@@ -156,6 +157,14 @@ public class Main implements IMainListener
                 main.showGUI();
             }
         });
+	}
+
+	public static Printer getPrinter() {
+		return printer;
+	}
+
+	public static void setPrinter(Printer printer) {
+		Main.printer = printer;
 	}
 
 

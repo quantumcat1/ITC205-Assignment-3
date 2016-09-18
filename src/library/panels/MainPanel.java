@@ -16,20 +16,6 @@ public class MainPanel extends ABorrowPanel//extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 
-	/*private static MainPanel instance = null;
-
-	public static MainPanel getInstance(Main main)
-	{
-		//we hope it is already created if we are trying to get this outside of Main (will pass a null)
-		if(instance == null)
-		{
-			//Main main = new Main();
-			instance = new MainPanel(main);
-		}
-		return instance;
-	}*/
-
-	//private MainPanel(IMainListener listener)
 	public MainPanel(IMainListener listener)
 	{
 		setBorder(new TitledBorder(null, "Main Menu", TitledBorder.LEADING, TitledBorder.TOP, null, null));
