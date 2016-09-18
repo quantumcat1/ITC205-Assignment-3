@@ -47,4 +47,9 @@ public class DAO <X extends Entity>
 		return null;
 	}
 
+	public void clear()
+	{
+		database.clear();
+	}
+
 }
