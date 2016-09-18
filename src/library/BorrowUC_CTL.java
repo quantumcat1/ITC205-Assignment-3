@@ -180,7 +180,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		}
 		else
 		{
-			//TODO: error message because book is on loan
+			ui.displayErrorMessage("Book " + id + " is on loan");
 		}
 	}
 
