@@ -225,9 +225,10 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	{
 		ui.setState(EBorrowState.CREATED);
 		LoanDAO.getInstance().add(loanList);
-		Main.getPrinter().print(buildLoanListDisplay(loanList));
+
 		if(!bTest) //static methods kill integration testing
 		{
+			Main.getPrinter().print(buildLoanListDisplay(loanList));
 			Main.setEnabled(false, false, false, true); //only main borrow panel enabled
 		}
 	}
