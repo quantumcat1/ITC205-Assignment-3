@@ -124,14 +124,14 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		{
 			//will do this whether restricted or not:
 			borrower = member;
-			if(!bTest) //Main static methods cause an unresolveable problem in integration testing
-			{
-				Main.setEnabled(false, true, false, true); //only main borrow panel and book scanner enabled
-			}
 			EMemberState state = Member.checkRestricted(member);
 			if(state != EMemberState.NOT_RESTRICTED)
 			{
 				ui.setState(EBorrowState.BORROWING_RESTRICTED);
+				if(!bTest) //Main static methods cause an unresolveable problem in integration testing
+				{
+					Main.setEnabled(false, false, false, true); //only main borrow panel enabled
+				}
 				if(state == EMemberState.RESTRICTED_FINES)
 				{
 					((BorrowUC_UI)ui).get().displayOverFineLimitMessage(member.getFineAmount());
@@ -142,8 +142,12 @@ public class BorrowUC_CTL implements ICardReaderListener,
 				}
 				((BorrowUC_UI)ui).get().displayErrorMessage("Member " + memberId + " cannot borrow at this time.");
 			}
-			else
+			else //not restricted
 			{
+				if(!bTest) //Main static methods cause an unresolveable problem in integration testing
+				{
+					Main.setEnabled(false, true, false, true); //only main borrow panel and book scanner enabled (not restricted)
+				}
 				ui.setState(EBorrowState.SCANNING_BOOKS);
 				float fine = member.getFineAmount();
 				if(fine > 0)
