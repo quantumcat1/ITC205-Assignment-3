@@ -131,7 +131,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 			EMemberState state = Member.checkRestricted(member);
 			if(state != EMemberState.NOT_RESTRICTED)
 			{
-				((BorrowUC_UI)ui).get().setState(EBorrowState.BORROWING_RESTRICTED);
+				ui.setState(EBorrowState.BORROWING_RESTRICTED);
 				if(state == EMemberState.RESTRICTED_FINES)
 				{
 					((BorrowUC_UI)ui).get().displayOverFineLimitMessage(member.getFineAmount());
