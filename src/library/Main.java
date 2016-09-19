@@ -37,14 +37,12 @@ public class Main implements IMainListener
 		setupTestData();
 	}
 
-	//public static void setEnabled (boolean bReader, boolean bScanner, boolean bPrinter, boolean bDisplay)
-	public static boolean setEnabled (boolean bReader, boolean bScanner, boolean bPrinter, boolean bDisplay)
+	public static void setEnabled (boolean bReader, boolean bScanner, boolean bPrinter, boolean bDisplay)
 	{
 		reader.setEnabled(bReader);
 		scanner.setEnabled(bScanner);
 		getPrinter().setEnabled(bPrinter);
 		display.setEnabled(bDisplay);
-		return true;
 	}
 
 
@@ -60,9 +58,6 @@ public class Main implements IMainListener
 	@Override
 	public void borrowBooks()
 	{
-		//BorrowUC_CTL ctl = new BorrowUC_CTL(reader, scanner, printer, display);
-				// null, null, null);
-		//ctl = new BorrowUC_CTL(reader, scanner, printer, display);
 		ctl = new BorrowUC_CTL(display);
         javax.swing.SwingUtilities.invokeLater
         (
@@ -126,7 +121,7 @@ public class Main implements IMainListener
 
 		//create a member with maxed out loans
 		//TODO: make sure too many loans can't be added.
-		for (int i=2; i<7; i++)
+		for (int i = 2; i < 7; i ++)
 		{
 			Loan loan = new Loan(memberArr[3], bookArr[i], now);
 			LoanDAO.getInstance().add(loan);
@@ -136,7 +131,7 @@ public class Main implements IMainListener
 		memberArr[4].addFine(Member.MAX_FINE/2);
 
 		//a member with a couple of loans but not over the limit
-		for (int i=7; i<9; i++)
+		for (int i = 7; i < 9; i ++)
 		{
 			LoanDAO.getInstance().add(new Loan(memberArr[5], bookArr[i], now));
 		}
@@ -153,19 +148,18 @@ public class Main implements IMainListener
             public void run()
             {
             	Main.display.setDisplay(new MainPanel(main), "Main Menu");
-            	//main.display.setDisplay(MainPanel.getInstance(main), "Main Menu");
                 main.showGUI();
             }
         });
 	}
 
-	public static Printer getPrinter() {
+	public static Printer getPrinter()
+	{
 		return printer;
 	}
 
-	public static void setPrinter(Printer printer) {
+	public static void setPrinter(Printer printer)
+	{
 		Main.printer = printer;
 	}
-
-
 }

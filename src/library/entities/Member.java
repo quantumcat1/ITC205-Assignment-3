@@ -14,7 +14,7 @@ public class Member extends Entity
 	private float fineAmount;
 	private String phoneNumber;
 	private String emailAddress;
-	private static int counter = 0;
+	private static int counter = 1;
 
 	public Member (String firstName, String lastName, String phoneNumber, String emailAddress)
 	{
@@ -27,7 +27,7 @@ public class Member extends Entity
 
 	public static void resetCounter()
 	{
-		counter = 0;
+		counter = 1;
 	}
 
 	public static EMemberState checkRestricted(Member member)

@@ -80,7 +80,7 @@ public class CardReader extends JFrame implements ICardReader
 				try
 				{
 					int memberId = new Integer(text).intValue();
-					if (memberId <= 0)
+					if (memberId < 0)
 					{
 						throw new NumberFormatException();
 					}
