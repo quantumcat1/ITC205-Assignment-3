@@ -40,7 +40,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 									 IBorrowUIListener
 {
 	private IDisplay display;
-	private IBorrowUI ui;
+	private BorrowUC_UI ui;
 
 	//lists for temporary data until confirmed:
 	private List<Book> bookList; //books scanned
@@ -85,7 +85,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		this.borrower = borrower;
 	}
 
-	public IBorrowUI getUi()
+	public BorrowUC_UI getUi()
 	{
 		return ui;
 	}
@@ -118,7 +118,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		Member member = MemberDAO.getInstance().getById(memberId);
 		if(member == null)
 		{
-			ui.displayErrorMessage("Member ID " + memberId + " not found");
+			((BorrowUC_UI)ui).get().displayErrorMessage("Member ID " + memberId + " not found");
 		}
 		else
 		{
@@ -131,24 +131,29 @@ public class BorrowUC_CTL implements ICardReaderListener,
 			EMemberState state = Member.checkRestricted(member);
 			if(state != EMemberState.NOT_RESTRICTED)
 			{
-				ui.setState(EBorrowState.BORROWING_RESTRICTED);
+				((BorrowUC_UI)ui).get().setState(EBorrowState.BORROWING_RESTRICTED);
 				if(state == EMemberState.RESTRICTED_FINES)
 				{
-					ui.displayOverFineLimitMessage(member.getFineAmount());
+					((BorrowUC_UI)ui).get().displayOverFineLimitMessage(member.getFineAmount());
 				}
 				else if (state == EMemberState.RESTRICTED_LOANS)
 				{
-					ui.displayAtLoanLimitMessage();
+					((BorrowUC_UI)ui).get().displayAtLoanLimitMessage();
 				}
-				ui.displayErrorMessage("Member " + memberId + " cannot borrow at this time.");
+				((BorrowUC_UI)ui).get().displayErrorMessage("Member " + memberId + " cannot borrow at this time.");
 			}
 			else
 			{
 				ui.setState(EBorrowState.SCANNING_BOOKS);
+				float fine = member.getFineAmount();
+				if(fine > 0)
+				{
+					((BorrowUC_UI)ui).get().displayOutstandingFineMessage(fine);
+				}
 			}
-			ui.displayMemberDetails(borrower.getId(), borrower.fullName(), borrower.getPhoneNumber());
+			((BorrowUC_UI)ui).get().displayMemberDetails(borrower.getId(), borrower.fullName(), borrower.getPhoneNumber());
 			List<Loan> loans = LoanDAO.getInstance().findLoansByBorrower(borrower);
-			ui.displayExistingLoan(buildLoanListDisplay(loans));
+			((BorrowUC_UI)ui).get().displayExistingLoan(buildLoanListDisplay(loans));
 		}
 	}
 
@@ -158,7 +163,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		Book book = BookDAO.getInstance().getById(id);
 		if(book == null)
 		{
-			ui.displayErrorMessage("Book " + id + " not found");
+			((BorrowUC_UI)ui).get().displayErrorMessage("Book " + id + " not found");
 		}
 		else if(LoanDAO.getInstance().getLoanByBook(book) == null) //not already on loan
 		{
@@ -166,12 +171,12 @@ public class BorrowUC_CTL implements ICardReaderListener,
 			if(book.getState() == EBookState.ACCEPTABLE) //exists, not on loan, in good enough condition to borrow
 			{
 				bookList.add(book);
-				ui.displayScannedBookDetails(bookList.get(bookList.size() - 1).toString());
+				((BorrowUC_UI)ui).get().displayScannedBookDetails(bookList.get(bookList.size() - 1).toString());
 
 				Calendar cal = Calendar.getInstance();
 				Date now = cal.getTime();
 				loanList.add(new Loan(borrower, book, now));
-				ui.displayPendingLoan(buildLoanListDisplay(loanList));
+				((BorrowUC_UI)ui).get().displayPendingLoan(buildLoanListDisplay(loanList));
 			}
 			else
 			{
@@ -180,7 +185,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		}
 		else
 		{
-			ui.displayErrorMessage("Book " + id + " is on loan");
+			((BorrowUC_UI)ui).get().displayErrorMessage("Book " + id + " is on loan");
 		}
 	}
 
@@ -200,7 +205,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	public void scansCompleted(boolean bTest)
 	{
 		ui.setState(EBorrowState.CONFIRMING_LOANS);
-		ui.displayConfirmingLoan(buildLoanListDisplay(loanList));
+		((BorrowUC_UI)ui).get().displayConfirmingLoan(buildLoanListDisplay(loanList));
 		if(!bTest) //Main static methods kill integration testing and there is no way to fix it
 		{
 			Main.setEnabled(false, false, false, true); //only main borrow panel enabled
@@ -232,8 +237,8 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	{
 		ui.setState(EBorrowState.SCANNING_BOOKS);
 		loanList.clear();
-		ui.displayPendingLoan("");
-		ui.displayScannedBookDetails("");
+		((BorrowUC_UI)ui).get().displayPendingLoan("");
+		((BorrowUC_UI)ui).get().displayScannedBookDetails("");
 		if(!bTest)//static methods kill integration testing
 		{
 			Main.setEnabled(false, true, false, true); //main borrow panel and scan books panel enabled
@@ -257,7 +262,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 
 
 
-	public class BorrowUC_UI extends JPanel implements IBorrowUI
+	public class BorrowUC_UI extends JPanel //implements IBorrowUI
 	{
 		private static final long serialVersionUID = 1L;
 		private IBorrowUIListener listener;
@@ -271,7 +276,6 @@ public class BorrowUC_CTL implements ICardReaderListener,
 			this.panels = new HashMap<EBorrowState,IBorrowUI>();
 			this.setLayout(new CardLayout());
 			this.state = EBorrowState.INITIALIZED;
-			IMainListener mainListener;
 
 			addPanel(new SwipeCardPanel(listener),   EBorrowState.INITIALIZED);
 			addPanel(new ScanningPanel(listener),    EBorrowState.SCANNING_BOOKS);
@@ -333,76 +337,6 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		public IBorrowUI get()
 		{
 			return panels.get(state);
-		}
-
-		@Override
-		public void displayMemberDetails(int memberID, String memberName, String memberPhone)
-		{
-			get().displayMemberDetails(memberID, memberName, memberPhone);
-
-		}
-
-		@Override
-		public void displayExistingLoan(String loanDetails)
-		{
-			get().displayExistingLoan(loanDetails);
-
-		}
-
-		@Override
-		public void displayOverDueMessage()
-		{
-			get().displayOverDueMessage();
-
-		}
-
-		@Override
-		public void displayAtLoanLimitMessage()
-		{
-			get().displayAtLoanLimitMessage();
-
-		}
-
-		@Override
-		public void displayOutstandingFineMessage(float amountOwing)
-		{
-			get().displayOutstandingFineMessage(amountOwing);
-
-		}
-
-		@Override
-		public void displayOverFineLimitMessage(float amountOwing)
-		{
-			get().displayOverFineLimitMessage(amountOwing);
-
-		}
-
-		@Override
-		public void displayScannedBookDetails(String bookDetails)
-		{
-			get().displayScannedBookDetails(bookDetails);
-
-		}
-
-		@Override
-		public void displayPendingLoan(String loanDetails)
-		{
-			get().displayPendingLoan(loanDetails);
-
-		}
-
-		@Override
-		public void displayConfirmingLoan(String loanDetails)
-		{
-			get().displayConfirmingLoan(loanDetails);
-
-		}
-
-		@Override
-		public void displayErrorMessage(String errorMesg)
-		{
-			get().displayErrorMessage(errorMesg);
-
 		}
 	}
 }
